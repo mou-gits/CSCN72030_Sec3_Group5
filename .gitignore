@@ -1,0 +1,18 @@
+# Ignore Python virtual environment
+backend/.venv/
+
+# Ignore all __pycache__ folders recursively
+**/__pycache__/
+
+# Ignore compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE configs (optional)
+.vscode/
+.idea/
