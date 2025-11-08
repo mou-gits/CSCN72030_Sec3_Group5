@@ -1,11 +1,11 @@
 Project overview and setup instructions go here. 
-# 🏫 Dorm Climate Control System
+# Dorm Climate Control System
 
 This project simulates a SCADA-like system for monitoring and controlling dorm room climate. It includes a C# backend, a WinForms GUI, and two Flutter Android apps for mobile interaction via BLE. The system supports real-time telemetry, actuator control, and BLE-based communication between mobile and backend components.
 
 ---
 
-## 🧱 Architecture Overview
+## Architecture Overview
 
 | Component              | Platform     | Tech Stack         | Role |
 |------------------------|--------------|---------------------|------|
@@ -17,7 +17,7 @@ This project simulates a SCADA-like system for monitoring and controlling dorm r
 
 ---
 
-## 🔄 BLE Communication
+## BLE Communication
 
 - **Backend (Windows)** acts as BLE central using Windows BLE API or Bluetooth Framework
 - **Mobile apps (Android)** use Flutter BLE plugins (`flutter_blue_plus`)
@@ -25,7 +25,7 @@ This project simulates a SCADA-like system for monitoring and controlling dorm r
 
 ---
 
-## 📁 Folder Structure
+## Folder Structure
 
 ```
 dorm-climate-control/
@@ -42,7 +42,7 @@ dorm-climate-control/
 
 ---
 
-## 🚀 Sprint 1 Demo Requirements
+## Sprint 1 Demo Requirements
 
 - Each team member must show **running code** for their assigned user stories
 - Any **integration** between modules (e.g., backend ↔ mobile) must be live and working
@@ -50,7 +50,7 @@ dorm-climate-control/
 
 ---
 
-## 🧠 Development Notes
+## Development Notes
 
 - Backend logic must follow **SOLID principles** in C#
 - CSV files are deprecated — use a proper **DBMS** (e.g., SQLite)
@@ -59,7 +59,7 @@ dorm-climate-control/
 
 ---
 
-## 🛠️ Setup Instructions
+## Setup Instructions
 
 Each module has its own `README.md` with setup instructions:
 - `backend_csharp/README.md`
@@ -70,7 +70,7 @@ Each module has its own `README.md` with setup instructions:
 
 ---
 
-## 👥 Team Members
+## Team Members
 
 - Moutushi – Backend logic, BLE integration, GUI coordination
 - Arman – Mobile BLE surrogate and HMI integration
@@ -78,7 +78,7 @@ Each module has its own `README.md` with setup instructions:
 
 ---
 
-## 📚 Resources
+## Resources
 
 - [Windows BLE API](https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth)
 - [Flutter BLE Plugin](https://pub.dev/packages/flutter_blue_plus)
