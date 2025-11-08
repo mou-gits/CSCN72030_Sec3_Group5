@@ -73,8 +73,9 @@ Each module has its own `README.md` with setup instructions:
 ## Team Members
 
 - Moutushi – Backend logic, BLE integration, GUI coordination
-- Arman – Mobile BLE surrogate and HMI integration
-- [Add others as needed]
+- Tanveer - GUI (C#)
+- Arman – Mobile HMI integration
+- Kenneth - BLE sensor surrogate
 
 ---
 
