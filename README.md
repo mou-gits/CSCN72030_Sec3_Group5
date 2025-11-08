@@ -1,4 +1,4 @@
-# Dorm Climate Control System
+# Dorm Climate Control System - Group 3
 
 A SCADA-inspired climate control simulation for dorm rooms, integrating mobile BLE devices, a C# backend, and a WinForms GUI. Built collaboratively using GitHub workflows, this project demonstrates modular development, BLE communication, and database-backed telemetry.
 
