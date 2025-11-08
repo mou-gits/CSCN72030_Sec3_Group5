@@ -1,74 +1,87 @@
-# Dorm Climate Control System
+Project overview and setup instructions go here. 
+# 🏫 Dorm Climate Control System
 
-A modular, SCADA-inspired system for simulating and controlling dorm room temperatures across multiple devices. Built as a Term 3 project for the **Software Development Life Cycle (SDLC)** course under **Professor Russell**.
-
----
-
-## Project Overview
-
-This system integrates:
-
-- **Mobile Devices** as BLE-based HMIs and sensor surrogates  
-- **Backend Controller** with simulation and HVAC logic (Python + FastAPI)  
-- **GUI Frontend** for real-time monitoring (C# WinForms)
-
-It demonstrates centralized control, real-time feedback, and modular design — aligning with SDLC principles of planning, implementation, and iterative refinement.
+This project simulates a SCADA-like system for monitoring and controlling dorm room climate. It includes a C# backend, a WinForms GUI, and two Flutter Android apps for mobile interaction via BLE. The system supports real-time telemetry, actuator control, and BLE-based communication between mobile and backend components.
 
 ---
 
-## System Components
+## 🧱 Architecture Overview
 
-| Module | Description |
-|--------|-------------|
-| `backend/` | Python FastAPI backend with BLE pairing, simulation engine, and HVAC controller |
-| `mobile/hmi_app/` | Flutter app for user input (desired temperature) via BLE |
-| `mobile/sensor_surrogate/` | Flutter app that advertises battery temperature as a BLE peripheral |
-| `gui_frontend/` | C# WinForms GUI that displays telemetry from the backend |
-| `docs/` | Architecture notes, sprint plans, and design documentation |
-| `tests/` | Unit and integration tests for backend and mobile components |
+| Component              | Platform     | Tech Stack         | Role |
+|------------------------|--------------|---------------------|------|
+| **Backend Controller** | Windows      | C# (.NET)           | SCADA logic, BLE pairing, DB access |
+| **GUI Frontend**       | Windows      | C# WinForms         | Visual display of telemetry and actuator states |
+| **Mobile HMI App**     | Android      | Flutter + BLE       | Sends desired temperature to backend |
+| **Sensor Surrogate**   | Android      | Flutter + BLE       | Advertises battery temperature |
+| **Database**           | Local (Windows) | SQLite or SQL Server LocalDB | Stores telemetry, actuator logs, outside temperature |
 
 ---
 
-## Getting Started
+## 🔄 BLE Communication
 
-### Backend Setup
+- **Backend (Windows)** acts as BLE central using Windows BLE API or Bluetooth Framework
+- **Mobile apps (Android)** use Flutter BLE plugins (`flutter_blue_plus`)
+- BLE is used to exchange temperature data and control signals between backend and mobile devices
 
-```bash
-cd backend
-python -m venv .venv
-.venv\Scripts\activate     # On Windows
-pip install -r requirements.txt
-uvicorn main:app --reload
+---
+
+## 📁 Folder Structure
+
+```
+dorm-climate-control/
+├── backend_csharp/          # C# backend logic
+├── gui_frontend/            # C# WinForms GUI
+├── mobile/
+│   ├── hmi_app/             # Flutter Android app for HMI
+│   └── sensor_surrogate/    # Flutter Android app for sensor simulation
+├── database/                # DB schema and seed scripts
+├── docs/                    # Architecture, sprint plans, integration notes
+├── tests/                   # Unit and integration tests
+└── README.md                # This file
 ```
 
-### Mobile Apps
+---
 
-Flutter-based apps for:
-- BLE sensor surrogate
-- BLE HMI for user input
+## 🚀 Sprint 1 Demo Requirements
 
-Placeholder files are provided. Full implementation to follow in Sprint 2.
+- Each team member must show **running code** for their assigned user stories
+- Any **integration** between modules (e.g., backend ↔ mobile) must be live and working
+- Moutushi and Arman must complete and integrate their modules for full marks
 
-### GUI Frontend
-C# WinForms app that:
-- Displays room temperatures
-- Shows heater/AC actuator states
-- Reflects backend state in real time
+---
 
-Placeholder provided. Full implementation to follow in Sprint 2.
+## 🧠 Development Notes
 
-### Signal Flow Summary
-- Sensor phones advertise battery temperature via BLE
-- Backend pairs, reads temp, initializes simulation
-- HMI phones send desired temp via BLE
-- Backend updates HVAC settings and simulates room temp
-- GUI and HMIs receive updated telemetry
+- Backend logic must follow **SOLID principles** in C#
+- CSV files are deprecated — use a proper **DBMS** (e.g., SQLite)
+- Python is allowed **only for GUI**, not for backend or SCADA logic
+- BLE must be implemented in **C# on Windows**, not Python
 
-### Contributors
-- Tanveer Singh Jandu
-- Armaan Singh Dhillon
-- Kenneth Oluoch
-- Moutushi Sarkar
+---
 
-### License
-This project is for academic use under the SDLC course. Not licensed for commercial distribution.
+## 🛠️ Setup Instructions
+
+Each module has its own `README.md` with setup instructions:
+- `backend_csharp/README.md`
+- `gui_frontend/README.md`
+- `mobile/hmi_app/README.md`
+- `mobile/sensor_surrogate/README.md`
+- `database/README.md`
+
+---
+
+## 👥 Team Members
+
+- Moutushi – Backend logic, BLE integration, GUI coordination
+- Arman – Mobile BLE surrogate and HMI integration
+- [Add others as needed]
+
+---
+
+## 📚 Resources
+
+- [Windows BLE API](https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth)
+- [Flutter BLE Plugin](https://pub.dev/packages/flutter_blue_plus)
+- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
+- [SQLite for .NET](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/)
+

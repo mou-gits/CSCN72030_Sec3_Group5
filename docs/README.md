@@ -1,1 +1,1 @@
-"Docs placeholder" 
+Placeholder for documentation folder. 

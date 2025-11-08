@@ -1,18 +1,70 @@
-# Ignore Python virtual environment
-backend/.venv/
+# =========================
+# C# / .NET / Visual Studio
+# =========================
 
-# Ignore all __pycache__ folders recursively
-**/__pycache__/
+## Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+*.log
 
-# Ignore compiled Python files
-*.pyc
-*.pyo
-*.pyd
+## User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-# OS-specific
-.DS_Store
-Thumbs.db
-
-# IDE configs (optional)
+## VS Code settings (if used)
 .vscode/
-.idea/
+
+## Visual Studio settings
+.vs/
+*.dbmdl
+*.pdb
+
+## NuGet packages
+*.nupkg
+packages/
+*.snupkg
+
+## Entity Framework
+Migrations/
+
+## SQLite database files
+*.sqlite
+*.db
+*.db-shm
+*.db-wal
+
+## Configuration
+appsettings.Development.json
+appsettings.Local.json
+
+## Flutter (mobile apps)
+mobile/**/build/
+mobile/**/.dart_tool/
+mobile/**/.packages
+mobile/**/.flutter-plugins
+mobile/**/.flutter-plugins-dependencies
+mobile/**/.idea/
+mobile/**/.vscode/
+mobile/**/pubspec.lock
+
+## OS-specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+## Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## Others
+*.bak
+*.orig
+*.swp
+*.tmp
