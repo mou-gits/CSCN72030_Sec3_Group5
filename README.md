@@ -1,19 +1,32 @@
-Project overview and setup instructions go here. 
 # Dorm Climate Control System
 
-This project simulates a SCADA-like system for monitoring and controlling dorm room climate. It includes a C# backend, a WinForms GUI, and two Flutter Android apps for mobile interaction via BLE. The system supports real-time telemetry, actuator control, and BLE-based communication between mobile and backend components.
+A SCADA-inspired climate control simulation for dorm rooms, integrating mobile BLE devices, a C# backend, and a WinForms GUI. Built collaboratively using GitHub workflows, this project demonstrates modular development, BLE communication, and database-backed telemetry.
 
 ---
 
-## Architecture Overview
+## Repository Overview
+
+This repo contains all components of the system:
+
+- `backend_csharp/` — C# backend logic (SCADA controller, BLE, DB access)
+- `gui_frontend/` — C# WinForms GUI for monitoring and control
+- `mobile/hmi_app/` — Flutter Android app for user input via BLE
+- `mobile/sensor_surrogate/` — Flutter Android app simulating battery temperature via BLE
+- `database/` — DB schema and seed data (SQLite or SQL Server LocalDB)
+- `docs/` — Architecture, sprint plans, integration notes
+- `tests/` — Unit and integration tests
+
+---
+
+## Architecture Summary
 
 | Component              | Platform     | Tech Stack         | Role |
 |------------------------|--------------|---------------------|------|
-| **Backend Controller** | Windows      | C# (.NET)           | SCADA logic, BLE pairing, DB access |
-| **GUI Frontend**       | Windows      | C# WinForms         | Visual display of telemetry and actuator states |
-| **Mobile HMI App**     | Android      | Flutter + BLE       | Sends desired temperature to backend |
-| **Sensor Surrogate**   | Android      | Flutter + BLE       | Advertises battery temperature |
-| **Database**           | Local (Windows) | SQLite or SQL Server LocalDB | Stores telemetry, actuator logs, outside temperature |
+| Backend Controller     | Windows      | C# (.NET)           | SCADA logic, BLE pairing, DB access |
+| GUI Frontend           | Windows      | C# WinForms         | Visual display of telemetry and actuator states |
+| Mobile HMI App         | Android      | Flutter + BLE       | Sends desired temperature to backend |
+| Sensor Surrogate       | Android      | Flutter + BLE       | Advertises battery temperature |
+| Database               | Local (Windows) | SQLite or SQL Server LocalDB | Stores telemetry, actuator logs, outside temperature |
 
 ---
 
@@ -25,23 +38,6 @@ This project simulates a SCADA-like system for monitoring and controlling dorm r
 
 ---
 
-## Folder Structure
-
-```
-dorm-climate-control/
-├── backend_csharp/          # C# backend logic
-├── gui_frontend/            # C# WinForms GUI
-├── mobile/
-│   ├── hmi_app/             # Flutter Android app for HMI
-│   └── sensor_surrogate/    # Flutter Android app for sensor simulation
-├── database/                # DB schema and seed scripts
-├── docs/                    # Architecture, sprint plans, integration notes
-├── tests/                   # Unit and integration tests
-└── README.md                # This file
-```
-
----
-
 ## Sprint 1 Demo Requirements
 
 - Each team member must show **running code** for their assigned user stories
@@ -50,12 +46,17 @@ dorm-climate-control/
 
 ---
 
-## Development Notes
+## GitHub Collaboration Checklist
 
-- Backend logic must follow **SOLID principles** in C#
-- CSV files are deprecated — use a proper **DBMS** (e.g., SQLite)
-- Python is allowed **only for GUI**, not for backend or SCADA logic
-- BLE must be implemented in **C# on Windows**, not Python
+✅ Repository name: `CSCN72020-SecX-GroupY`  
+✅ All team members invited as collaborators  
+✅ Professor added to repo access  
+✅ Branches created per module or developer  
+✅ Pull requests used for integration  
+✅ Issues tracked with reproduction steps, root cause, fix details, and version tags  
+✅ Only source code files committed — no solution/project files  
+✅ Initial Hello World app committed and synced  
+✅ Weekly updates and peer reviews documented in Issues
 
 ---
 
@@ -73,9 +74,8 @@ Each module has its own `README.md` with setup instructions:
 ## Team Members
 
 - Moutushi – Backend logic, BLE integration, GUI coordination
-- Tanveer - GUI (C#)
-- Arman – Mobile HMI integration
-- Kenneth - BLE sensor surrogate
+- Arman – Mobile BLE surrogate and HMI integration
+- [Add others as needed]
 
 ---
 
@@ -85,4 +85,10 @@ Each module has its own `README.md` with setup instructions:
 - [Flutter BLE Plugin](https://pub.dev/packages/flutter_blue_plus)
 - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
 - [SQLite for .NET](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/)
+- [GitHub Collaboration Guide](https://docs.github.com/en)
 
+---
+
+## Notes
+
+- All commits, issues, and pull requests are traceable and reviewed 
