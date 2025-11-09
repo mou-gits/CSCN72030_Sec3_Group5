@@ -1,6 +1,8 @@
 ﻿using DormClimateBackend.Models;
 using DormClimateBackend.Utilities;
-using System.Diagnostics;
+using System;
+using System.Threading;
+using static DormClimateBackend.Controllers.HvacActuator;
 
 namespace DormClimateBackend.Services
 {
@@ -111,7 +113,8 @@ namespace DormClimateBackend.Services
             DateTime startTime,
             TimeSpan duration,
             TimeSpan samplingInterval,
-            Action<DateTime, double, double> logCallback)
+            Action<DateTime, double, double> logCallback,
+            Func<DateTime, double, double?, ActuatorOutput> controlCallback)
         {
             if (!_initialized)
                 throw new InvalidOperationException("SimulationService must be initialized before running.");
@@ -120,21 +123,23 @@ namespace DormClimateBackend.Services
             DateTime currentSampleTime = startTime;
             DateTime simTime = startTime;
 
+            TimeSpan stepSpan = TimeSpan.FromSeconds(_integrationParams.StepSize);
+
             while (simTime < endTime)
             {
-                double stepSize = _integrationParams.StepSize;
-                TimeSpan stepSpan = TimeSpan.FromSeconds(stepSize);
-
                 double? extTemp = _externalTemp.GetInterpolatedTemperature(simTime);
                 if (extTemp.HasValue)
                 {
-                    double dTdt = _modelStructure.ComputeRateOfChange(_roomTemp, extTemp.Value, _heaterUsage, _acUsage);
-                    double deltaT = dTdt * stepSize;
+                    double roomTemp;
+                    lock (_lock) { roomTemp = _roomTemp; }
 
-                    lock (_lock)
-                    {
-                        _roomTemp += deltaT;
-                    }
+                    var output = controlCallback(simTime, roomTemp, extTemp);
+                    SetControl(output.HeaterPercent * 100, output.AcPercent * 100);
+
+                    double dTdt = _modelStructure.ComputeRateOfChange(roomTemp, extTemp.Value, _heaterUsage, _acUsage);
+                    double deltaT = Math.Clamp(dTdt * _integrationParams.StepSize, -1.0, 1.0);
+
+                    lock (_lock) { _roomTemp += deltaT; }
                 }
 
                 simTime += stepSpan;
@@ -142,10 +147,7 @@ namespace DormClimateBackend.Services
                 if (simTime >= currentSampleTime)
                 {
                     double roomTemp;
-                    lock (_lock)
-                    {
-                        roomTemp = _roomTemp;
-                    }
+                    lock (_lock) { roomTemp = _roomTemp; }
 
                     double? extTempForLog = _externalTemp.GetInterpolatedTemperature(simTime);
                     logCallback(simTime, roomTemp, extTempForLog ?? double.NaN);

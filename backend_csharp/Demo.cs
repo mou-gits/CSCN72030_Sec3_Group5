@@ -1,23 +1,23 @@
-﻿using DormClimateBackend.Models;
+﻿using DormClimateBackend.Controllers;
+using DormClimateBackend.Models;
 using DormClimateBackend.Services;
 using DormClimateBackend.Utilities;
 using System;
-
-class Program
+public class Demo
 {
-    static void Main(string[] args)
+    public static void Run(bool realTime = false)
     {
         // 1. Load external temperature service
         var dbPath = PathLocator.LocateDBPath(); // Replace with actual path if needed
-        var externalTempService = new ExternalTemperatureService(dbPath);
+        var externalTempService = new ExternalTemperatureService(dbPath, true, 10);
 
         // 2. Define model and integration parameters
         var modelParams = new ModelParameters
         {
-            ThermalCapacity = 1000.0,
-            MaxHeaterPower = 2000.0,
-            MaxACPower = 2000.0,
-            Conductance = 50.0
+            ThermalCapacity = 2500,
+            MaxHeaterPower = 1500,
+            MaxACPower = 1500,
+            Conductance = 35
         };
 
         var integrationParams = new IntegrationParameters
@@ -26,30 +26,59 @@ class Program
         };
 
         // 3. Build model structure
-        var structure = new ModelStructure(modelParams);
+        var modelStructure = new ModelStructure(modelParams);
 
-        // 4. Create simulation service
-        var simService = new SimulationService(externalTempService, structure, modelParams, integrationParams);
+        // 4. Initialize simulationService
+        var simulationService = new SimulationService(
+            externalTempService,
+            modelStructure,
+            modelParams,
+            integrationParams);
 
-        // 5. Initialize simulation
-        simService.Initialize(initialRoomTemp: 30.0);
-        simService.SetControl(heaterPercent: 0, acPercent: 0); // No heating or AC
+        double initialRoomTemp = 25.0;
+        double initialDesiredTemp = 25.0;
+        TimeSpan dashboardInterval = TimeSpan.FromMinutes(1);
+        TimeSpan totalDuration = TimeSpan.FromMinutes(30);
 
-        // 6. Define simulation window
+        var controller = new SimulationController(
+            simulationService,
+            externalTempService,
+            initialRoomTemp,
+            initialDesiredTemp,
+            dashboardInterval,
+            totalDuration,
+            integrationParams);
+
         DateTime startTime = DateTime.UtcNow;
-        TimeSpan duration = TimeSpan.FromHours(24);
-        TimeSpan samplingInterval = TimeSpan.FromMinutes(30);
 
-        // 7. Run passive simulation
-        Console.WriteLine("SimTime\t\t\tRoomTemp\tExtTemp");
-        simService.RunPassiveSimulation(
-            startTime,
-            duration,
-            samplingInterval,
-            (simTime, roomTemp, extTemp) =>
+        controller.OnStateUpdated += state =>
+        {
+            Console.WriteLine($"{state.SimTime:HH:mm:ss} | Room: {state.RoomTemperature:F2}°C | Ext: {state.ExternalTemperature:F2}°C | Desired: {controller.GetDesiredTemperature():F2}°C | Mode: {state.HvacMode} | Heater: {state.ActuatorOutput.HeaterPercent * 100:F0}% | AC: {state.ActuatorOutput.AcPercent * 100:F0}%");
+
+            // Trigger temperature change after 15 minutes of elapsed time
+            var elapsed = realTime
+                ? (DateTime.UtcNow - startTime).TotalMinutes
+                : (state.SimTime - startTime).TotalMinutes;
+
+            if (elapsed >= 15)
             {
-                Console.WriteLine($"{simTime:yyyy-MM-dd HH:mm}\t{roomTemp:F2}°C\t\t{extTemp:F2}°C");
+                controller.UpdateDesiredTemperature(30.0);
             }
-        );
+        };
+
+        if (realTime)
+            controller.RunRealTime();
+        else
+            controller.RunAccelerated();
+    }
+   class Program
+    {
+        static void Main(string[] args)
+        {
+            // Toggle simulation mode here
+            Demo.Run(realTime: true); // Set to false for accelerated mode
+        }
     }
 }
+
+

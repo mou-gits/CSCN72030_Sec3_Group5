@@ -8,18 +8,30 @@ namespace DormClimateBackend.Utilities
 {
     public static class PathLocator
     {
-        public static string LocateDBPath()
+        public static string LocateDBPath(string? overridePath = null)
         {
-            var directoryInfo = new DirectoryInfo(AppContext.BaseDirectory);
-            var projectRoot = directoryInfo.Parent?.Parent?.Parent?.Parent?.FullName
-                ?? throw new InvalidOperationException("Could not determine project root directory.");
+            if (!string.IsNullOrWhiteSpace(overridePath))
+            {
+                if (!File.Exists(overridePath))
+                    throw new FileNotFoundException($"Override database path not found: {overridePath}");
 
-            var dbPath = Path.Combine(projectRoot, "database", "DormClimate.db");
+                return overridePath;
+            }
 
-            if (!File.Exists(dbPath))
-                throw new FileNotFoundException($"Database not found at: {dbPath}");
+            // Use a known relative path from the current working directory
+            var candidatePaths = new[]
+            {
+        Path.Combine(Directory.GetCurrentDirectory(), "database", "DormClimate.db"),
+        Path.Combine(AppContext.BaseDirectory, "database", "DormClimate.db")
+    };
 
-            return dbPath;
+            foreach (var path in candidatePaths)
+            {
+                if (File.Exists(path))
+                    return path;
+            }
+
+            throw new FileNotFoundException("Could not locate DormClimate.db in expected locations.");
         }
     }
 }

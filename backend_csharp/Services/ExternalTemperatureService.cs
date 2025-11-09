@@ -5,14 +5,28 @@ namespace DormClimateBackend.Services
     public class ExternalTemperatureService
     {
         private readonly string _connectionString;
+        private readonly bool _useConstantTemperature;
+        private readonly double? _constantTemperature;
 
+        // Existing constructor — unchanged behavior
         public ExternalTemperatureService(string dbPath)
+            : this(dbPath, false, null) { }
+
+        // New constructor with constant override support
+        public ExternalTemperatureService(string dbPath, bool useConstantTemperature, double? constantTemperature)
         {
             _connectionString = $"Data Source={dbPath}";
+            _useConstantTemperature = useConstantTemperature;
+            _constantTemperature = constantTemperature;
         }
 
         public double? GetInterpolatedTemperature(DateTime targetTime)
         {
+            if (_useConstantTemperature && _constantTemperature.HasValue)
+            {
+                return _constantTemperature;
+            }
+
             using var connection = new SqliteConnection(_connectionString);
             connection.Open();
 
@@ -20,10 +34,10 @@ namespace DormClimateBackend.Services
 
             var cmd = connection.CreateCommand();
             cmd.CommandText = @"
-                                SELECT time, temperature FROM ExternalTemperature
-                                WHERE time <= @targetTime
-                                ORDER BY time DESC
-                                LIMIT 1;";
+                            SELECT time, temperature FROM ExternalTemperature
+                            WHERE time <= @targetTime
+                            ORDER BY time DESC
+                            LIMIT 1;";
             cmd.Parameters.AddWithValue("@targetTime", timeOnly);
 
             TimeSpan? t1 = null;
@@ -39,10 +53,10 @@ namespace DormClimateBackend.Services
             }
 
             cmd.CommandText = @"
-                                SELECT time, temperature FROM ExternalTemperature
-                                WHERE time > @targetTime
-                                ORDER BY time ASC
-                                LIMIT 1;";
+                            SELECT time, temperature FROM ExternalTemperature
+                            WHERE time > @targetTime
+                            ORDER BY time ASC
+                            LIMIT 1;";
             cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@targetTime", timeOnly);
 
@@ -68,5 +82,6 @@ namespace DormClimateBackend.Services
 
             return temp1 ?? temp2;
         }
-    } 
+    }
+
 }
