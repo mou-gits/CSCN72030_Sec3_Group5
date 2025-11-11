@@ -14,3 +14,4 @@ class BatteryTempReader {
     return (level >= 45 && level <= 55);
   }
 }
+
