@@ -1,0 +1,20 @@
+name: sensor_surrogate
+description: A Flutter app for BLE sensor testing.
+version: 1.0.0
+
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  battery_plus: ^7.0.0
+  flutter_blue_plus: ^1.21.0   # Remove if BLE isn't needed
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.4.3
+
+flutter:
+  uses-material-design: true
