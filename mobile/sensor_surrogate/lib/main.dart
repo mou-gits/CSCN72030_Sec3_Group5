@@ -76,4 +76,6 @@ class _BatteryHomePageState extends State<BatteryHomePage> {
       ),
     );
   }
+
+  
 }
