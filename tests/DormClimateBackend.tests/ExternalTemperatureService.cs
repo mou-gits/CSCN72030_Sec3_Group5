@@ -9,7 +9,7 @@ namespace DormClimateBackend.Tests.ExternalTemperaturesService
       [TestMethod]
         public void GetInterpolatedTemperature_ReturnsConstant_WhenOverrideEnabled()
         {
-            var _dbPath = PathLocator.LocateDBPath("C:\\Work\\Moutushi Sarkar\\codes\\CSCN72030_Sec3_Group5\\database\\DormClimate.db");
+            var _dbPath = PathLocator.LocateDBPath("C:\\BCS\\Term 3\\P3-SDLC-Russell\\dorm-climate-control\\database\\DormClimate.db");
             var service = new ExternalTemperatureService(_dbPath, true, 22.5);
             var result = service.GetInterpolatedTemperature(DateTime.Now);
             Assert.AreEqual(22.5, result);
@@ -18,7 +18,7 @@ namespace DormClimateBackend.Tests.ExternalTemperaturesService
         [TestMethod]
         public void GetInterpolatedTemperature_InterpolatesCorrectly_BetweenTwoPoints()
         {
-            var _dbPath = PathLocator.LocateDBPath("C:\\Work\\Moutushi Sarkar\\codes\\CSCN72030_Sec3_Group5\\database\\DormClimate.db");
+            var _dbPath = PathLocator.LocateDBPath("C:\\BCS\\Term 3\\P3-SDLC-Russell\\dorm-climate-control\\database\\DormClimate.db");
             var service = new ExternalTemperatureService(_dbPath);
 
             // Choose a time between 00:15:00 (6.5°C) and 00:30:00 (7°C)

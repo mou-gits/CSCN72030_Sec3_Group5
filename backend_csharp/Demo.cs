@@ -8,8 +8,8 @@ public class Demo
     public static void Run(bool realTime = false)
     {
         // 1. Load external temperature service
-        var dbPath = PathLocator.LocateDBPath(); // Replace with actual path if needed
-        var externalTempService = new ExternalTemperatureService(dbPath, true, 10);
+        var dbPath = PathLocator.LocateDBPath("C:\\BCS\\Term 3\\P3-SDLC-Russell\\dorm-climate-control\\database\\DormClimate.db"); // Replace with actual path if needed
+        var externalTempService = new ExternalTemperatureService(dbPath);
 
         // 2. Define model and integration parameters
         var modelParams = new ModelParameters
@@ -62,7 +62,7 @@ public class Demo
 
             if (elapsed >= 15)
             {
-                controller.UpdateDesiredTemperature(30.0);
+                controller.UpdateDesiredTemperature(35.0);
             }
         };
 
@@ -76,7 +76,7 @@ public class Demo
         static void Main(string[] args)
         {
             // Toggle simulation mode here
-            Demo.Run(realTime: true); // Set to false for accelerated mode
+            Demo.Run(realTime: false); // Set to false for accelerated mode
         }
     }
 }
