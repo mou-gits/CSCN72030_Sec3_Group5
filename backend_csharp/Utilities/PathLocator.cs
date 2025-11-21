@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +22,13 @@ namespace DormClimateBackend.Utilities
             // Use a known relative path from the current working directory
             var candidatePaths = new[]
             {
-        Path.Combine(Directory.GetCurrentDirectory(), "database", "DormClimate.db"),
-        Path.Combine(AppContext.BaseDirectory, "database", "DormClimate.db")
-    };
-
+                Path.Combine(Directory.GetCurrentDirectory(),"..","..","..","..", "database", "DormClimate.db"),
+                Path.Combine(AppContext.BaseDirectory, "database", "DormClimate.db")
+            };
+           
             foreach (var path in candidatePaths)
             {
+                Console.WriteLine(path);
                 if (File.Exists(path))
                     return path;
             }
