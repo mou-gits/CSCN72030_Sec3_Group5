@@ -11,56 +11,39 @@ void main() {
     late BatteryTempReader batteryTempReader;
 
     setUp(() {
-      // Arrange
       mockBattery = MockBattery();
       batteryTempReader = BatteryTempReader(battery: mockBattery);
     });
 
     test('getBatteryLevel returns the mocked battery level', () async {
-      // Arrange
       const mockLevel = 42;
-      when(mockBattery.batteryLevel).thenAnswer((_) async => mockLevel);
+      when(mockBattery.batteryLevel).thenAnswer((_) => Future.value(mockLevel));
 
-      // Act
       final level = await batteryTempReader.getBatteryLevel();
-
-      // Assert
       expect(level, mockLevel);
     });
 
     test('isBatteryOptimal returns true for level between 40 and 60', () async {
-      // Arrange
       const optimalLevel = 50;
-      when(mockBattery.batteryLevel).thenAnswer((_) async => optimalLevel);
+      when(mockBattery.batteryLevel).thenAnswer((_) => Future.value(optimalLevel));
 
-      // Act
       final isOptimal = await batteryTempReader.isBatteryOptimal();
-
-      // Assert
       expect(isOptimal, true);
     });
 
     test('isBatteryOptimal returns false for level below 40', () async {
-      // Arrange
       const lowLevel = 39;
-      when(mockBattery.batteryLevel).thenAnswer((_) async => lowLevel);
+      when(mockBattery.batteryLevel).thenAnswer((_) => Future.value(lowLevel));
 
-      // Act
       final isOptimal = await batteryTempReader.isBatteryOptimal();
-
-      // Assert
       expect(isOptimal, false);
     });
 
     test('isBatteryOptimal returns false for level above 60', () async {
-      // Arrange
       const highLevel = 61;
-      when(mockBattery.batteryLevel).thenAnswer((_) async => highLevel);
+      when(mockBattery.batteryLevel).thenAnswer((_) => Future.value(highLevel));
 
-      // Act
       final isOptimal = await batteryTempReader.isBatteryOptimal();
-
-      // Assert
       expect(isOptimal, false);
     });
   });

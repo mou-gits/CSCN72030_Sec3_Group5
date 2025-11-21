@@ -1,0 +1,29 @@
+PODS:
+  - battery_plus (0.0.1):
+    - FlutterMacOS
+  - flutter_ble_peripheral (1.3.0):
+    - Flutter
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+
+DEPENDENCIES:
+  - battery_plus (from `Flutter/ephemeral/.symlinks/plugins/battery_plus/macos`)
+  - flutter_ble_peripheral (from `Flutter/ephemeral/.symlinks/plugins/flutter_ble_peripheral/darwin`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+
+EXTERNAL SOURCES:
+  battery_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/battery_plus/macos
+  flutter_ble_peripheral:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_ble_peripheral/darwin
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+
+SPEC CHECKSUMS:
+  battery_plus: 0495761dc45b8a1631ed5066d4af1990314eac6f
+  flutter_ble_peripheral: a24a4a800ac159843cf206b2a4b75c9e015478ed
+  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
+
+PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
+
+COCOAPODS: 1.16.2
