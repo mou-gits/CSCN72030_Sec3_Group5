@@ -8,7 +8,8 @@ public class Demo
     public static void Run(bool realTime = false)
     {
         // 1. Load external temperature service
-        var dbPath = PathLocator.LocateDBPath("C:\\BCS\\Term 3\\P3-SDLC-Russell\\dorm-climate-control\\database\\DormClimate.db"); // Replace with actual path if needed
+        var repoFolder = "C:\\Work\\Moutushi Sarkar\\codes\\CSCN72030_Sec3_Group5";
+        var dbPath = PathLocator.LocateDBPath(repoFolder, "DormClimate.db"); 
         var externalTempService = new ExternalTemperatureService(dbPath);
 
         // 2. Define model and integration parameters

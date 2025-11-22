@@ -9,31 +9,37 @@ namespace DormClimateBackend.Utilities
 {
     public static class PathLocator
     {
-        public static string LocateDBPath(string? overridePath = null)
+        public static string LocateDBPath(string path, string filename)
         {
-            if (!string.IsNullOrWhiteSpace(overridePath))
-            {
-                if (!File.Exists(overridePath))
-                    throw new FileNotFoundException($"Override database path not found: {overridePath}");
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Path cannot be null or empty.", nameof(path));
 
-                return overridePath;
+            // Case 1: Path is a file → return directly
+            if (File.Exists(path))
+                return path;
+
+            // Case 2: Path is a folder → check for filename
+            if (Directory.Exists(path))
+            {
+                string directFile = Path.Combine(path, filename);
+                string dbFolderFile = Path.Combine(path, "database", filename);
+
+                bool directExists = File.Exists(directFile);
+                bool dbExists = File.Exists(dbFolderFile);
+
+                if (directExists && dbExists)
+                    return dbFolderFile; // prefer /database/ version
+                if (dbExists)
+                    return dbFolderFile;
+                if (directExists)
+                    return directFile;
+
+                throw new FileNotFoundException(
+                    $"Could not find {filename} in '{path}' or '{Path.Combine(path, "database")}'.");
             }
 
-            // Use a known relative path from the current working directory
-            var candidatePaths = new[]
-            {
-                Path.Combine(Directory.GetCurrentDirectory(),"..","..","..","..", "database", "DormClimate.db"),
-                Path.Combine(AppContext.BaseDirectory, "database", "DormClimate.db")
-            };
-           
-            foreach (var path in candidatePaths)
-            {
-                Console.WriteLine(path);
-                if (File.Exists(path))
-                    return path;
-            }
-
-            throw new FileNotFoundException("Could not locate DormClimate.db in expected locations.");
+            // Neither file nor folder exists
+            throw new FileNotFoundException($"Path does not exist: {path}");
         }
     }
 }

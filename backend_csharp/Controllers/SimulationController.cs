@@ -24,6 +24,8 @@ namespace DormClimateBackend.Controllers
         private readonly TimeSpan _totalDuration;
         private readonly IntegrationParameters _integrationParams;
 
+        private volatile bool _running = false;
+
         public event Action<SimulationState>? OnStateUpdated;
 
         public SimulationController(
@@ -45,21 +47,26 @@ namespace DormClimateBackend.Controllers
             _simulationService.Initialize(initialRoomTemp);
         }
 
-        public double GetDesiredTemperature()
+        public double GetDesiredTemperature() => _desiredTemp;
+
+        public void UpdateDesiredTemperature(double newDesiredTemp)
         {
-            return _desiredTemp;
+            _desiredTemp = newDesiredTemp;
         }
+
+        // --- REALTIME MODE ---
         public void RunRealTime()
         {
             DateTime simStartTime = DateTime.UtcNow;
             DateTime lastPhysicsUpdate = simStartTime;
             DateTime lastDashboardUpdate = simStartTime;
 
-            _simulationService.Start();
+            _simulationService.StartRealtime();
+            _running = true;
 
             new Thread(() =>
             {
-                while (true)
+                while (_running)
                 {
                     DateTime currentSimTime = _simulationService.GetCurrentSimTime();
 
@@ -98,31 +105,42 @@ namespace DormClimateBackend.Controllers
             }).Start();
         }
 
+        // --- ACCELERATED MODE ---
         public void RunAccelerated()
         {
             DateTime startTime = DateTime.UtcNow;
+            _running = true;
 
             _simulationService.RunPassiveSimulation(
                 startTime,
-                _totalDuration,
                 _dashboardInterval,
                 (simTime, roomTemp, extTemp) =>
                 {
+                    if (!_running) 
+                        return; // allow stop mid-run
+
                     var action = _hvacController.GetHvacAction(roomTemp, _desiredTemp, extTemp);
                     var output = _hvacActuator.Translate(action);
                     OnStateUpdated?.Invoke(new SimulationState(simTime, roomTemp, extTemp, action, output));
+                    return;
                 },
                 (simTime, roomTemp, extTemp) =>
                 {
+                    if (!_running)
+                        return new HvacActuator.ActuatorOutput(0, 0);
+
                     return ComputeControl(simTime, roomTemp, extTemp ?? double.NaN);
                 });
         }
 
-        public void UpdateDesiredTemperature(double newDesiredTemp)
+        // --- STOP BOTH MODES ---
+        public void Stop()
         {
-            _desiredTemp = newDesiredTemp;
+            _running = false;
+            _simulationService.Stop();
         }
 
+        // --- INTERNAL CONTROL LOGIC ---
         private HvacActuator.ActuatorOutput ComputeControl(DateTime simTime, double roomTemp, double extTemp)
         {
             var action = _hvacController.GetHvacAction(roomTemp, _desiredTemp, extTemp);
