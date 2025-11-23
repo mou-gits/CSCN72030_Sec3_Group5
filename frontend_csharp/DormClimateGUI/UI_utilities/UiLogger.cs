@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using backend_csharp.Utilities;
 
 namespace DormClimateGUI.UI_utilities
 {
-    public class UiLogger
+    public class UiLogger : ILogger
     {
         private readonly RichTextBox _logBox;
         private readonly Form _form;
@@ -37,13 +38,15 @@ namespace DormClimateGUI.UI_utilities
 
         public void Clear()
         {
+            Action clear = () => _logBox.Clear();
+
             if (_form.InvokeRequired)
             {
-                _form.BeginInvoke(new Action(() => _logBox.Clear()));
+                _form.BeginInvoke(clear);
             }
             else
             {
-                _logBox.Clear();
+                clear();
             }
         }
     }

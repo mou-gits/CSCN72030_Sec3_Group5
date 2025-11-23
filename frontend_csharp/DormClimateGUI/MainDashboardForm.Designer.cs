@@ -221,41 +221,44 @@ namespace DormClimateGUI
             // 
             // cmdConnectSensor
             // 
-            cmdConnectSensor.Location = new Point(171, 52);
+            cmdConnectSensor.Location = new Point(8, 79);
             cmdConnectSensor.Name = "cmdConnectSensor";
-            cmdConnectSensor.Size = new Size(121, 23);
+            cmdConnectSensor.Size = new Size(286, 23);
             cmdConnectSensor.TabIndex = 7;
             cmdConnectSensor.Text = "Connect Device";
             cmdConnectSensor.UseVisualStyleBackColor = true;
+            cmdConnectSensor.Click += cmdConnectSensor_Click;
             // 
             // cmdSensorDevices
             // 
             cmdSensorDevices.FormattingEnabled = true;
-            cmdSensorDevices.Location = new Point(6, 52);
+            cmdSensorDevices.Location = new Point(8, 50);
             cmdSensorDevices.Name = "cmdSensorDevices";
-            cmdSensorDevices.Size = new Size(135, 23);
+            cmdSensorDevices.Size = new Size(286, 23);
             cmdSensorDevices.TabIndex = 7;
             // 
             // cmbSearchSensor
             // 
-            cmbSearchSensor.Location = new Point(6, 22);
+            cmbSearchSensor.Location = new Point(8, 22);
             cmbSearchSensor.Name = "cmbSearchSensor";
             cmbSearchSensor.Size = new Size(286, 23);
             cmbSearchSensor.TabIndex = 4;
             cmbSearchSensor.Text = "Search BlueTooth Devices";
             cmbSearchSensor.UseVisualStyleBackColor = true;
+            cmbSearchSensor.Click += cmbSearchSensor_Click;
             // 
             // txtSensorDeviceId
             // 
-            txtSensorDeviceId.Location = new Point(171, 87);
+            txtSensorDeviceId.Location = new Point(8, 132);
             txtSensorDeviceId.Name = "txtSensorDeviceId";
             txtSensorDeviceId.ReadOnly = true;
             txtSensorDeviceId.Size = new Size(121, 23);
             txtSensorDeviceId.TabIndex = 5;
+            txtSensorDeviceId.TextChanged += txtSensorDeviceId_TextChanged;
             // 
             // txtSensor
             // 
-            txtSensor.Location = new Point(171, 124);
+            txtSensor.Location = new Point(173, 132);
             txtSensor.Name = "txtSensor";
             txtSensor.ReadOnly = true;
             txtSensor.Size = new Size(121, 23);
@@ -264,7 +267,7 @@ namespace DormClimateGUI
             // lblSensorDeviceId
             // 
             lblSensorDeviceId.AutoSize = true;
-            lblSensorDeviceId.Location = new Point(6, 90);
+            lblSensorDeviceId.Location = new Point(8, 114);
             lblSensorDeviceId.Name = "lblSensorDeviceId";
             lblSensorDeviceId.Size = new Size(94, 15);
             lblSensorDeviceId.TabIndex = 0;
@@ -273,7 +276,7 @@ namespace DormClimateGUI
             // lblSensor
             // 
             lblSensor.AutoSize = true;
-            lblSensor.Location = new Point(6, 127);
+            lblSensor.Location = new Point(173, 114);
             lblSensor.Name = "lblSensor";
             lblSensor.Size = new Size(112, 15);
             lblSensor.TabIndex = 1;

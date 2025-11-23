@@ -1,11 +1,14 @@
-﻿using DormClimateBackend.Controllers;
+﻿using backend_csharp.Utilities;
+using DormClimateBackend.Controllers;
 using DormClimateBackend.Services;
 using DormClimateGUI.UI_utilities;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace DormClimateGUI
 {
     public partial class MainDashboardForm : Form
     {
+        private BLEManager _bleManager;
         private SimulationController _simController;
         private ExternalTemperatureService _externalTempService;
         private DateTime _currentSimTime;
@@ -15,31 +18,28 @@ namespace DormClimateGUI
         public MainDashboardForm(SimulationController simController, ExternalTemperatureService externalTempService)
         {
             InitializeComponent();
-            _logger = new UiLogger(this, rtbLog);
 
-            // Example usage
+            // Initialize logger
+            _logger = new UiLogger(this, rtbLog);
             _logger.Log("Dashboard initialized.");
 
+            // Assign services
             _simController = simController;
             _externalTempService = externalTempService;
 
-            // Ensure Override External Temperature Checkbox starts unchecked
+            // Initial UI state
             chkOverrideExternal.Checked = false;
-
-            // Apply initial enabling/disabling for the External Temp override controls
             ApplyOverrideState();
 
-            // Initial UI state
             chkRealtime.Checked = true;
             _currentSimTime = DateTime.Now;
-
             lblTime.Text = _currentSimTime.ToString("HH:mm:ss");
             UpdateExternalTemp(_currentSimTime);
 
             cmdStart.Enabled = false;   // dimmed
             cmdStop.Enabled = true;     // available
 
-            //Setting up the initial displays. 
+            // Room 1 initial displays
             lblRoom1Temp.Text = "-- °C";
             lblRoom1DesiredTemp.Text = "-- °C";
             lblRoom1ExternalTemp.Text = "-- °C";
@@ -47,12 +47,56 @@ namespace DormClimateGUI
             lblRoom1Heater.Text = "-- %";
             lblRoom1AC.Text = "-- %";
 
-            //Set the chkOverrideHMI checkbox state and button states
+            // HMI override initial state
             chkOverrideHMI.Checked = false;
             SetHMIButtons();
 
-            StartSimulation();          // begin in realtime mode
+            // BLE communication manager initialization
+            _bleManager = new BLEManager(_logger);
+            cmdSensorDevices.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            // Hook events to update GUI
+            _bleManager.OnDeviceFound += entry =>
+            {
+                bool exists = cmdSensorDevices.Items.Cast<DeviceEntry>()
+                    .Any(x => x.Id == entry.Id);
+
+                if (!exists)
+                {
+                    cmdSensorDevices.Items.Add(entry); // stores the whole object
+                }
+            };
+
+            _bleManager.OnLog += msg => _logger.Log(msg);
+
+            _bleManager.OnDeviceInfoReady += (deviceIdHex, summary) =>
+            {
+                txtSensorDeviceId.Text = deviceIdHex;   // keep showing device ID
+                txtSensor.Text = summary;               // show only the Notify characteristic
+            };
+
+            _bleManager.OnDeviceInfoReady += (deviceIdHex, gattSummary) =>
+            {
+                // Ensure UI updates on the UI thread
+                if (InvokeRequired)
+                {
+                    BeginInvoke(new Action(() =>
+                    {
+                        txtSensorDeviceId.Text = deviceIdHex;
+                        txtSensor.Text = gattSummary;
+                    }));
+                }
+                else
+                {
+                    txtSensorDeviceId.Text = deviceIdHex;
+                    txtSensor.Text = gattSummary;
+                }
+            };
+
+            // Start simulation in realtime mode
+            StartSimulation();
         }
+
         private void chkOverrideExternal_CheckedChanged(object sender, EventArgs e)
         {
             ApplyOverrideState();
@@ -179,7 +223,7 @@ namespace DormClimateGUI
 
             if (!double.TryParse(txtExtTemp.Text, out value))
             {
-                // Invalid input → default to 20
+                // Invalid input - default to a safe value
                 value = 20;
                 txtExtTemp.Text = "20";
             }
@@ -223,6 +267,42 @@ namespace DormClimateGUI
         private void MainDashboardForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _simController.Stop();
+        }
+
+        private void cmbSearchSensor_Click(object sender, EventArgs e)
+        {
+            cmdSensorDevices.Items.Clear();
+            _bleManager.StartScan();
+        }
+
+        private async void cmdConnectSensor_Click(object sender, EventArgs e)
+        {
+            _bleManager.StopScan(); // optional safety
+
+            var selected = cmdSensorDevices.SelectedItem as DeviceEntry;
+            if (selected == null)
+            {
+                MessageBox.Show("Please select a device from the list.");
+                return;
+            }
+            // Show device ID immediately
+            txtSensorDeviceId.Text = selected.Id;
+            _logger.Log($"Attempting connection to {selected.Display}");
+
+            // Ask BLEManager to connect and return summary
+            string summary = await _bleManager.ConnectAsync(selected.Id);
+
+            // Then read the Notify characteristic value
+            string sensorValue = await _bleManager.ReadNotifyCharacteristicAsync();
+            txtSensor.Text = sensorValue;
+
+        }
+
+
+
+        private void txtSensorDeviceId_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
