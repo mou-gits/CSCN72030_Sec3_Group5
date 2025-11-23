@@ -21,13 +21,17 @@ namespace DormClimateGUI.UI_utilities
         {
             string entry = $"[{DateTime.Now:HH:mm:ss}] {message}{Environment.NewLine}";
 
+            Action update = () => {
+                _logBox.Text = entry + _logBox.Text;
+                };
+
             if (_form.InvokeRequired)
             {
-                _form.BeginInvoke(new Action(() => _logBox.AppendText(entry)));
+                _form.BeginInvoke(update);
             }
             else
             {
-                _logBox.AppendText(entry);
+                update();
             }
         }
 

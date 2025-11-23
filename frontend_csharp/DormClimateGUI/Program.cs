@@ -43,7 +43,6 @@ namespace DormClimateGUI
                 integrationParams);
 
             var dashboardInterval = TimeSpan.FromSeconds(1);
-            var totalDuration = TimeSpan.FromMinutes(10);
 
             var simController = new SimulationController(
                 simulationService,

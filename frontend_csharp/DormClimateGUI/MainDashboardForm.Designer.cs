@@ -383,7 +383,7 @@ namespace DormClimateGUI
             // 
             // cmdClear
             // 
-            cmdClear.Location = new Point(550, 97);
+            cmdClear.Location = new Point(550, 99);
             cmdClear.Name = "cmdClear";
             cmdClear.Size = new Size(65, 23);
             cmdClear.TabIndex = 0;
@@ -487,10 +487,12 @@ namespace DormClimateGUI
             chkOverrideHMI.AutoSize = true;
             chkOverrideHMI.Location = new Point(344, 12);
             chkOverrideHMI.Name = "chkOverrideHMI";
-            chkOverrideHMI.Size = new Size(116, 19);
+            chkOverrideHMI.Size = new Size(97, 19);
             chkOverrideHMI.TabIndex = 8;
-            chkOverrideHMI.Text = "Override Request";
+            chkOverrideHMI.TabStop = false;
+            chkOverrideHMI.Text = "Override HMI";
             chkOverrideHMI.UseVisualStyleBackColor = true;
+            chkOverrideHMI.CheckedChanged += chkOverrideHMI_CheckedChanged;
             // 
             // btnRoomOneMinusTen
             // 
@@ -500,6 +502,7 @@ namespace DormClimateGUI
             btnRoomOneMinusTen.TabIndex = 7;
             btnRoomOneMinusTen.Text = "- 10";
             btnRoomOneMinusTen.UseVisualStyleBackColor = true;
+            btnRoomOneMinusTen.Click += btnRoomOneMinusTen_Click;
             // 
             // btnRoomOneMinusFive
             // 
@@ -509,6 +512,7 @@ namespace DormClimateGUI
             btnRoomOneMinusFive.TabIndex = 7;
             btnRoomOneMinusFive.Text = "- 5";
             btnRoomOneMinusFive.UseVisualStyleBackColor = true;
+            btnRoomOneMinusFive.Click += btnRoomOneMinusFive_Click;
             // 
             // btnRoomOnePlusFive
             // 
@@ -518,6 +522,7 @@ namespace DormClimateGUI
             btnRoomOnePlusFive.TabIndex = 7;
             btnRoomOnePlusFive.Text = "+ 5";
             btnRoomOnePlusFive.UseVisualStyleBackColor = true;
+            btnRoomOnePlusFive.Click += btnRoomOnePlusFive_Click;
             // 
             // btnRoomOnePlusTen
             // 
@@ -527,6 +532,7 @@ namespace DormClimateGUI
             btnRoomOnePlusTen.TabIndex = 7;
             btnRoomOnePlusTen.Text = "+ 10";
             btnRoomOnePlusTen.UseVisualStyleBackColor = true;
+            btnRoomOnePlusTen.Click += btnRoomOnePlusTen_Click;
             // 
             // label6
             // 
@@ -699,6 +705,7 @@ namespace DormClimateGUI
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "MainDashboardForm";
             Text = "DormClimate Dashboard";
+            FormClosing += MainDashboardForm_FormClosing;
             groupBoxHMI.ResumeLayout(false);
             groupBoxHMI.PerformLayout();
             groupBoxSensor.ResumeLayout(false);

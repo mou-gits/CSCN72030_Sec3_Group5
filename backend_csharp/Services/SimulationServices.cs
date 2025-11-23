@@ -77,14 +77,6 @@ public class SimulationService
         }).Start();
     }
 
-
-
-
-
-
-
-
-
     // --- STOP ---
     public void Stop()
     {
