@@ -47,7 +47,6 @@ public class Demo
             initialRoomTemp,
             initialDesiredTemp,
             dashboardInterval,
-            totalDuration,
             integrationParams);
 
         DateTime startTime = DateTime.UtcNow;

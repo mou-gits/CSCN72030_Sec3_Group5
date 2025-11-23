@@ -108,7 +108,6 @@ namespace DormClimateGUI
             groupBoxHMI.TabIndex = 0;
             groupBoxHMI.TabStop = false;
             groupBoxHMI.Text = "HMI Device";
-            groupBoxHMI.Enter += groupBoxHMI_Enter;
             // 
             // cmbHMIdevices
             // 
@@ -125,7 +124,6 @@ namespace DormClimateGUI
             txtHMIExternalTemperature.ReadOnly = true;
             txtHMIExternalTemperature.Size = new Size(100, 23);
             txtHMIExternalTemperature.TabIndex = 5;
-            txtHMIExternalTemperature.TextChanged += textBox4_TextChanged;
             // 
             // txtHMIDesiredTemperature
             // 
@@ -134,7 +132,6 @@ namespace DormClimateGUI
             txtHMIDesiredTemperature.ReadOnly = true;
             txtHMIDesiredTemperature.Size = new Size(100, 23);
             txtHMIDesiredTemperature.TabIndex = 5;
-            txtHMIDesiredTemperature.TextChanged += textBox3_TextChanged;
             // 
             // txtHMIDeviceID
             // 
@@ -143,7 +140,6 @@ namespace DormClimateGUI
             txtHMIDeviceID.ReadOnly = true;
             txtHMIDeviceID.Size = new Size(100, 23);
             txtHMIDeviceID.TabIndex = 5;
-            txtHMIDeviceID.TextChanged += txtHMIRoomTemperature_TextChanged;
             // 
             // txtHMIRoomTemperature
             // 
@@ -152,7 +148,6 @@ namespace DormClimateGUI
             txtHMIRoomTemperature.ReadOnly = true;
             txtHMIRoomTemperature.Size = new Size(100, 23);
             txtHMIRoomTemperature.TabIndex = 5;
-            txtHMIRoomTemperature.TextChanged += txtHMIRoomTemperature_TextChanged;
             // 
             // cmdConnectHMI
             // 
@@ -180,7 +175,6 @@ namespace DormClimateGUI
             lblHMIExternalTemperature.Size = new Size(135, 15);
             lblHMIExternalTemperature.TabIndex = 3;
             lblHMIExternalTemperature.Text = "Displayed External Temp";
-            lblHMIExternalTemperature.Click += label1_Click;
             // 
             // lblHMIDesiredTemperature
             // 
@@ -190,7 +184,6 @@ namespace DormClimateGUI
             lblHMIDesiredTemperature.Size = new Size(116, 15);
             lblHMIDesiredTemperature.TabIndex = 2;
             lblHMIDesiredTemperature.Text = "Desired Temperature";
-            lblHMIDesiredTemperature.Click += lblHMIDesiredTemperature_Click;
             // 
             // lblHMIRoomTemperature
             // 
@@ -200,7 +193,6 @@ namespace DormClimateGUI
             lblHMIRoomTemperature.Size = new Size(126, 15);
             lblHMIRoomTemperature.TabIndex = 1;
             lblHMIRoomTemperature.Text = "Displayed Room Temp";
-            lblHMIRoomTemperature.Click += label2_Click;
             // 
             // lblHMIDeviceID
             // 
@@ -210,7 +202,6 @@ namespace DormClimateGUI
             lblHMIDeviceID.Size = new Size(82, 15);
             lblHMIDeviceID.TabIndex = 0;
             lblHMIDeviceID.Text = "HMI Device ID";
-            lblHMIDeviceID.Click += lblHMIDeviceID_Click;
             // 
             // groupBoxSensor
             // 
@@ -253,7 +244,6 @@ namespace DormClimateGUI
             cmbSearchSensor.TabIndex = 4;
             cmbSearchSensor.Text = "Search BlueTooth Devices";
             cmbSearchSensor.UseVisualStyleBackColor = true;
-            cmbSearchSensor.Click += button1_Click;
             // 
             // txtSensorDeviceId
             // 
@@ -262,7 +252,6 @@ namespace DormClimateGUI
             txtSensorDeviceId.ReadOnly = true;
             txtSensorDeviceId.Size = new Size(121, 23);
             txtSensorDeviceId.TabIndex = 5;
-            txtSensorDeviceId.TextChanged += txtHMIRoomTemperature_TextChanged;
             // 
             // txtSensor
             // 
@@ -271,7 +260,6 @@ namespace DormClimateGUI
             txtSensor.ReadOnly = true;
             txtSensor.Size = new Size(121, 23);
             txtSensor.TabIndex = 5;
-            txtSensor.TextChanged += txtHMIRoomTemperature_TextChanged;
             // 
             // lblSensorDeviceId
             // 
@@ -281,7 +269,6 @@ namespace DormClimateGUI
             lblSensorDeviceId.Size = new Size(94, 15);
             lblSensorDeviceId.TabIndex = 0;
             lblSensorDeviceId.Text = "Sensor Device ID";
-            lblSensorDeviceId.Click += lblHMIDeviceID_Click;
             // 
             // lblSensor
             // 
@@ -291,7 +278,6 @@ namespace DormClimateGUI
             lblSensor.Size = new Size(112, 15);
             lblSensor.TabIndex = 1;
             lblSensor.Text = "Sensor Temperature";
-            lblSensor.Click += label2_Click;
             // 
             // groupBoxOverride
             // 
@@ -316,7 +302,6 @@ namespace DormClimateGUI
             lblExtTemp.Size = new Size(55, 15);
             lblExtTemp.TabIndex = 3;
             lblExtTemp.Text = "Ext Temp";
-            lblExtTemp.Click += lblExtTemp_Click;
             // 
             // txtExtTemp
             // 
@@ -324,7 +309,6 @@ namespace DormClimateGUI
             txtExtTemp.Name = "txtExtTemp";
             txtExtTemp.Size = new Size(49, 23);
             txtExtTemp.TabIndex = 2;
-            txtExtTemp.TextChanged += textBox1_TextChanged;
             // 
             // cmdStop
             // 
@@ -640,7 +624,6 @@ namespace DormClimateGUI
             label7.Size = new Size(372, 50);
             label7.TabIndex = 0;
             label7.Text = "Not Yet Implemented";
-            label7.Click += label7_Click;
             // 
             // groupBox1
             // 
@@ -656,7 +639,6 @@ namespace DormClimateGUI
             groupBox1.TabIndex = 6;
             groupBox1.TabStop = false;
             groupBox1.Text = "System";
-            groupBox1.Enter += groupBox1_Enter;
             // 
             // lblSimulationStatus
             // 
@@ -677,7 +659,6 @@ namespace DormClimateGUI
             lblDBExtTemp.Size = new Size(36, 15);
             lblDBExtTemp.TabIndex = 1;
             lblDBExtTemp.Text = "--  °C";
-            lblDBExtTemp.Click += lblDBExtTemp_Click;
             // 
             // label9
             // 
@@ -718,7 +699,6 @@ namespace DormClimateGUI
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "MainDashboardForm";
             Text = "DormClimate Dashboard";
-            Load += MainDashboardForm_Load;
             groupBoxHMI.ResumeLayout(false);
             groupBoxHMI.PerformLayout();
             groupBoxSensor.ResumeLayout(false);
@@ -734,85 +714,6 @@ namespace DormClimateGUI
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);
-        }
-
-        private void lblDBExtTemp_Click(object sender, EventArgs e)
-        {
-       
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-   
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chkOverrideExternal_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cmdSetExtTemp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblExtTemp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
- 
-        }
-
-        private void lblHMIDeviceID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        { 
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-     
-        }
-
-        private void groupBoxHMI_Enter(object sender, EventArgs e)
-        {
-      
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-        
-        }
-
-        private void txtHMIRoomTemperature_TextChanged(object sender, EventArgs e)
-        {
-    
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-     
-        }
-
-        private void lblHMIDesiredTemperature_Click(object sender, EventArgs e)
-        {
-           
         }
 
         #endregion

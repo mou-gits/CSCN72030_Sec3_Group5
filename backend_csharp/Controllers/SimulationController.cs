@@ -21,7 +21,6 @@ namespace DormClimateBackend.Controllers
 
         private double _desiredTemp;
         private readonly TimeSpan _dashboardInterval;
-        private readonly TimeSpan _totalDuration;
         private readonly IntegrationParameters _integrationParams;
 
         private volatile bool _running = false;
@@ -34,14 +33,12 @@ namespace DormClimateBackend.Controllers
             double initialRoomTemp,
             double desiredTemp,
             TimeSpan dashboardInterval,
-            TimeSpan totalDuration,
             IntegrationParameters integrationParams)
         {
             _simulationService = simulationService;
             _externalTemp = externalTemp;
             _desiredTemp = desiredTemp;
             _dashboardInterval = dashboardInterval;
-            _totalDuration = totalDuration;
             _integrationParams = integrationParams;
 
             _simulationService.Initialize(initialRoomTemp);

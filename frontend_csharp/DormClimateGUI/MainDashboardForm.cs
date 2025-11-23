@@ -1,4 +1,4 @@
-using DormClimateBackend.Controllers;
+ï»¿using DormClimateBackend.Controllers;
 using DormClimateBackend.Services;
 using DormClimateGUI.UI_utilities;
 
@@ -25,6 +25,13 @@ namespace DormClimateGUI
 
             this.FormClosing += MainDashboardForm_FormClosing;
 
+            // Ensure checkbox starts unchecked
+            chkOverrideExternal.Checked = false;
+
+            // Apply initial enabling/disabling
+            ApplyOverrideState();
+
+
             // Initial UI state
             chkRealtime.Checked = true;
             _currentSimTime = DateTime.Now;
@@ -36,6 +43,27 @@ namespace DormClimateGUI
             cmdStop.Enabled = true;     // available
 
             StartSimulation();          // begin in realtime mode
+        }
+        private void chkOverrideExternal_CheckedChanged(object sender, EventArgs e)
+        {
+            ApplyOverrideState();
+        }
+        private void ApplyOverrideState()
+        {
+            if (chkOverrideExternal.Checked)
+            {
+                txtExtTemp.Enabled = true;
+                cmdSetExtTemp.Enabled = true;
+                txtExtTemp.Text = string.Empty; // clear content
+            }
+            else
+            {
+                txtExtTemp.Enabled = false;
+                cmdSetExtTemp.Enabled = false;
+
+                // Switch service back to database mode
+                _externalTempService.UseDatabase();
+            }
         }
         private void StartSimulation()
         {
@@ -67,7 +95,7 @@ namespace DormClimateGUI
         private void UpdateExternalTemp(DateTime simTime)
         {
             double? extTemp = _externalTempService.GetInterpolatedTemperature(simTime);
-            lblDBExtTemp.Text = extTemp.HasValue ? $"{extTemp.Value:F1} °C" : "-- °C";
+            lblDBExtTemp.Text = extTemp.HasValue ? $"{extTemp.Value:F1} Â°C" : "-- Â°C";
         }
         private void cmdClear_Click(object sender, EventArgs e)
         {
@@ -85,7 +113,7 @@ namespace DormClimateGUI
             }
             else
             {
-                // Start accelerated mode (example: 60× faster)
+                // Start accelerated mode (example: 60Ã— faster)
                 _simController.RunAccelerated(_timeScale);
             }
         }
@@ -114,13 +142,23 @@ namespace DormClimateGUI
             lblSimulationStatus.ForeColor = Color.Blue;
             lblSimulationStatus.Font = new Font("Segoe UI", 9, FontStyle.Bold);
         }
-        private void MainDashboardForm_Load(object sender, EventArgs e)
-        {
-
-        }
         private void MainDashboardForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _simController.Stop();
+        }
+        private void cmdSetExtTemp_Click(object sender, EventArgs e)
+        {
+            double value;
+
+            if (!double.TryParse(txtExtTemp.Text, out value))
+            {
+                // Invalid input â†’ default to 20
+                value = 20;
+                txtExtTemp.Text = "20";
+            }
+
+            // Apply override with the chosen value
+            _externalTempService.OverrideWithConstant(value);
         }
     }
 }
