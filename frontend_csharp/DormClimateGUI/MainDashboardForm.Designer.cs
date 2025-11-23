@@ -311,7 +311,7 @@ namespace DormClimateGUI
             // lblExtTemp
             // 
             lblExtTemp.AutoSize = true;
-            lblExtTemp.Location = new Point(6, 69);
+            lblExtTemp.Location = new Point(6, 67);
             lblExtTemp.Name = "lblExtTemp";
             lblExtTemp.Size = new Size(55, 15);
             lblExtTemp.TabIndex = 3;
@@ -320,7 +320,7 @@ namespace DormClimateGUI
             // 
             // txtExtTemp
             // 
-            txtExtTemp.Location = new Point(76, 65);
+            txtExtTemp.Location = new Point(78, 62);
             txtExtTemp.Name = "txtExtTemp";
             txtExtTemp.Size = new Size(49, 23);
             txtExtTemp.TabIndex = 2;
@@ -348,7 +348,7 @@ namespace DormClimateGUI
             // 
             // cmdSetExtTemp
             // 
-            cmdSetExtTemp.Location = new Point(5, 99);
+            cmdSetExtTemp.Location = new Point(5, 98);
             cmdSetExtTemp.Name = "cmdSetExtTemp";
             cmdSetExtTemp.Size = new Size(122, 23);
             cmdSetExtTemp.TabIndex = 1;
@@ -359,7 +359,7 @@ namespace DormClimateGUI
             // chkOverrideExternal
             // 
             chkOverrideExternal.AutoSize = true;
-            chkOverrideExternal.Location = new Point(6, 36);
+            chkOverrideExternal.Location = new Point(6, 32);
             chkOverrideExternal.Name = "chkOverrideExternal";
             chkOverrideExternal.Size = new Size(122, 19);
             chkOverrideExternal.TabIndex = 0;

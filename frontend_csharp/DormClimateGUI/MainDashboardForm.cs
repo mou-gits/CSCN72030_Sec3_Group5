@@ -10,6 +10,7 @@ namespace DormClimateGUI
         private ExternalTemperatureService _externalTempService;
         private DateTime _currentSimTime;
         private UiLogger _logger;
+        private Double _timeScale = 60.0; // 1.0 = real-time, >1.0 = accelerated
 
         public MainDashboardForm(SimulationController simController, ExternalTemperatureService externalTempService)
         {
@@ -36,18 +37,19 @@ namespace DormClimateGUI
 
             StartSimulation();          // begin in realtime mode
         }
-        private void MainDashboardForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            _simController.Stop();
-        }
         private void StartSimulation()
         {
             if (chkRealtime.Checked)
                 _simController.RunRealTime();
             else
-                _simController.RunAccelerated(10.0);
+                _simController.RunAccelerated(_timeScale);
 
             _simController.OnStateUpdated += SimulationController_OnStateUpdated;
+        }
+        private void StopSimulation()
+        {
+            _simController.OnStateUpdated -= SimulationController_OnStateUpdated;
+            _simController.Stop();
         }
         private void SimulationController_OnStateUpdated(SimulationState state)
         {
@@ -67,11 +69,6 @@ namespace DormClimateGUI
             double? extTemp = _externalTempService.GetInterpolatedTemperature(simTime);
             lblDBExtTemp.Text = extTemp.HasValue ? $"{extTemp.Value:F1} °C" : "-- °C";
         }
-        private void StopSimulation()
-        {
-            _simController.OnStateUpdated -= SimulationController_OnStateUpdated;
-            // TODO: add a Stop() method in SimulationController to halt threads cleanly
-        }
         private void cmdClear_Click(object sender, EventArgs e)
         {
             _logger.Clear();
@@ -88,14 +85,14 @@ namespace DormClimateGUI
             }
             else
             {
-                // Start accelerated mode (example: 10× faster)
-                _simController.RunAccelerated(10.0);
+                // Start accelerated mode (example: 60× faster)
+                _simController.RunAccelerated(_timeScale);
             }
         }
-
         private void btnStop_Click(object sender, EventArgs e)
         {
-            _simController.Stop();
+            StopSimulation();
+
             cmdStart.Enabled = true;
             cmdStop.Enabled = false;
 
@@ -105,18 +102,11 @@ namespace DormClimateGUI
         }
         private void btnStart_Click(object sender, EventArgs e)
         {
-            // Ensure any previous run is stopped
-            _simController.Stop();
+            // Ensure clean slate
+            StopSimulation();
 
+            StartSimulation();
 
-            if (chkRealtime.Checked)
-            {
-                _simController.RunRealTime();
-            }
-            else
-            {
-                _simController.RunAccelerated(10.0); // or configurable factor
-            }
             cmdStart.Enabled = false;
             cmdStop.Enabled = true;
 
@@ -127,6 +117,10 @@ namespace DormClimateGUI
         private void MainDashboardForm_Load(object sender, EventArgs e)
         {
 
+        }
+        private void MainDashboardForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _simController.Stop();
         }
     }
 }
