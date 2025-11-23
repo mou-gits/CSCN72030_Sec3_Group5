@@ -51,7 +51,6 @@ namespace DormClimateGUI
                 initialRoomTemp: 22.0,
                 desiredTemp: 22.0,
                 dashboardInterval,
-                totalDuration,
                 integrationParams);
 
             // --- Pass dependencies into the form ---

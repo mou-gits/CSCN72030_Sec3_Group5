@@ -17,6 +17,14 @@ namespace DormClimateBackend.Utilities
             _initialized = true;
         }
 
+        public void SetTimeScale(double newScale)
+        {
+            if (newScale <= 0)
+                throw new ArgumentOutOfRangeException(nameof(newScale), "Time scale must be positive.");
+
+            _timeScale = newScale;
+        }
+
         public void Start()
         {
             if (!_initialized)

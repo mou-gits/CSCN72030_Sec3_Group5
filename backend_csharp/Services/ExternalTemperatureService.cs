@@ -5,19 +5,26 @@ namespace DormClimateBackend.Services
     public class ExternalTemperatureService
     {
         private readonly string _connectionString;
-        private readonly bool _useConstantTemperature;
-        private readonly double? _constantTemperature;
+        private bool _useConstantTemperature;
+        private double? _constantTemperature;
 
         // Existing constructor — unchanged behavior
         public ExternalTemperatureService(string dbPath)
-            : this(dbPath, false, null) { }
-
-        // New constructor with constant override support
-        public ExternalTemperatureService(string dbPath, bool useConstantTemperature, double? constantTemperature)
         {
             _connectionString = $"Data Source={dbPath}";
-            _useConstantTemperature = useConstantTemperature;
-            _constantTemperature = constantTemperature;
+        }
+
+        // Explicit toggle methods
+        public void OverrideWithConstant(double value)
+        {
+            _useConstantTemperature = true;
+            _constantTemperature = value;
+        }
+
+        public void UseDatabase()
+        {
+            _useConstantTemperature = false;
+            _constantTemperature = null;
         }
 
         public double? GetInterpolatedTemperature(DateTime targetTime)
