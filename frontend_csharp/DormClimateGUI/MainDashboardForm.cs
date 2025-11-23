@@ -25,12 +25,11 @@ namespace DormClimateGUI
 
             this.FormClosing += MainDashboardForm_FormClosing;
 
-            // Ensure checkbox starts unchecked
+            // Ensure Override External Temperature Checkbox starts unchecked
             chkOverrideExternal.Checked = false;
 
-            // Apply initial enabling/disabling
+            // Apply initial enabling/disabling for the External Temp override controls
             ApplyOverrideState();
-
 
             // Initial UI state
             chkRealtime.Checked = true;
@@ -41,6 +40,14 @@ namespace DormClimateGUI
 
             cmdStart.Enabled = false;   // dimmed
             cmdStop.Enabled = true;     // available
+
+            //Setting up the initial displays. 
+            lblRoom1Temp.Text = "-- °C";
+            lblRoom1DesiredTemp.Text = "-- °C";
+            lblRoom1ExternalTemp.Text = "-- °C";
+            lblRoom1HVACstatus.Text = "--";
+            lblRoom1Heater.Text = "-- %";
+            lblRoom1AC.Text = "-- %";
 
             StartSimulation();          // begin in realtime mode
         }
@@ -86,11 +93,29 @@ namespace DormClimateGUI
             else
                 UpdateSystemGroup(state);
         }
-        private void UpdateSystemGroup(SimulationState state)
+        private void UpdateSystemGroup(SimulationState  state)
         {
             _currentSimTime = state.SimTime;
             lblTime.Text = _currentSimTime.ToLocalTime().ToString("HH:mm:ss");
+
+            //External Temperature
             UpdateExternalTemp(_currentSimTime);
+
+            // Room temperature
+            lblRoom1Temp.Text = $"{state.RoomTemperature:F1} °C";
+
+            // Desired temperature
+            lblRoom1DesiredTemp.Text = $"{_simController.GetDesiredTemperature():F1} °C";
+
+            // External temperature (from state, not service)
+            lblRoom1ExternalTemp.Text = $"{state.ExternalTemperature:F1} °C";
+
+            // HVAC status (action description)
+            lblRoom1HVACstatus.Text = state.HvacMode.ToString();
+
+            // Heater and AC percentages
+            lblRoom1Heater.Text = $"{state.ActuatorOutput.HeaterPercent * 100:F0} %";
+            lblRoom1AC.Text = $"{state.ActuatorOutput.AcPercent * 100:F0} %";
         }
         private void UpdateExternalTemp(DateTime simTime)
         {

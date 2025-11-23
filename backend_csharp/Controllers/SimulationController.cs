@@ -22,9 +22,7 @@ namespace DormClimateBackend.Controllers
         private double _desiredTemp;
         private readonly TimeSpan _dashboardInterval;
         private readonly IntegrationParameters _integrationParams;
-
         private volatile bool _running = false;
-
         public event Action<SimulationState>? OnStateUpdated;
 
         public SimulationController(
@@ -48,14 +46,11 @@ namespace DormClimateBackend.Controllers
         {
             _simulationService.SetTimeScale(newScale);
         }
-
         public double GetDesiredTemperature() => _desiredTemp;
-
         public void UpdateDesiredTemperature(double newDesiredTemp)
         {
             _desiredTemp = newDesiredTemp;
         }
-
         // --- REALTIME MODE ---
         public void RunRealTime()
         {
@@ -107,7 +102,6 @@ namespace DormClimateBackend.Controllers
                 }
             }).Start();
         }
-
         // --- ACCELERATED MODE ---
         public void RunAccelerated(double timeScale)
         {
@@ -159,14 +153,12 @@ namespace DormClimateBackend.Controllers
                 }
             }).Start();
         }
-
         // --- STOP BOTH MODES ---
         public void Stop()
         {
             _running = false;
             _simulationService.Stop();
         }
-
         // --- INTERNAL CONTROL LOGIC ---
         private HvacActuator.ActuatorOutput ComputeControl(DateTime simTime, double roomTemp, double extTemp)
         {
