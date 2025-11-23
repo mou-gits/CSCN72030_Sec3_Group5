@@ -23,8 +23,6 @@ namespace DormClimateGUI
             _simController = simController;
             _externalTempService = externalTempService;
 
-            this.FormClosing += MainDashboardForm_FormClosing;
-
             // Ensure Override External Temperature Checkbox starts unchecked
             chkOverrideExternal.Checked = false;
 
@@ -48,6 +46,10 @@ namespace DormClimateGUI
             lblRoom1HVACstatus.Text = "--";
             lblRoom1Heater.Text = "-- %";
             lblRoom1AC.Text = "-- %";
+
+            //Set the chkOverrideHMI checkbox state and button states
+            chkOverrideHMI.Checked = false;
+            SetHMIButtons();
 
             StartSimulation();          // begin in realtime mode
         }
@@ -93,7 +95,7 @@ namespace DormClimateGUI
             else
                 UpdateSystemGroup(state);
         }
-        private void UpdateSystemGroup(SimulationState  state)
+        private void UpdateSystemGroup(SimulationState state)
         {
             _currentSimTime = state.SimTime;
             lblTime.Text = _currentSimTime.ToLocalTime().ToString("HH:mm:ss");
@@ -135,11 +137,13 @@ namespace DormClimateGUI
             {
                 // Start realtime mode
                 _simController.RunRealTime();
+                _logger.Log("Switched to Real-Time Mode.");
             }
             else
             {
                 // Start accelerated mode (example: 60× faster)
                 _simController.RunAccelerated(_timeScale);
+                _logger.Log($"Switched to Accelerated Mode (×{_timeScale}).");
             }
         }
         private void btnStop_Click(object sender, EventArgs e)
@@ -152,6 +156,7 @@ namespace DormClimateGUI
             lblSimulationStatus.Text = "---- OFFLINE ----";
             lblSimulationStatus.ForeColor = Color.Red;
             lblSimulationStatus.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            _logger.Log("Simulation Stopped - HVAC System Offline.");
         }
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -166,10 +171,7 @@ namespace DormClimateGUI
             lblSimulationStatus.Text = "----- ONLINE -----";
             lblSimulationStatus.ForeColor = Color.Blue;
             lblSimulationStatus.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-        }
-        private void MainDashboardForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            _simController.Stop();
+            _logger.Log("Simulation Started - HVAC System Online.");
         }
         private void cmdSetExtTemp_Click(object sender, EventArgs e)
         {
@@ -184,6 +186,43 @@ namespace DormClimateGUI
 
             // Apply override with the chosen value
             _externalTempService.OverrideWithConstant(value);
+            //log message with value of external temp override
+            _logger.Log($"Override applied: External Temperature = {value}.");
+        }
+        private void chkOverrideHMI_CheckedChanged(object sender, EventArgs e)
+        {
+            SetHMIButtons();
+        }
+        private void SetHMIButtons()
+        {
+            btnRoomOnePlusTen.Enabled = chkOverrideHMI.Checked;
+            btnRoomOnePlusFive.Enabled = chkOverrideHMI.Checked;
+            btnRoomOneMinusFive.Enabled = chkOverrideHMI.Checked;
+            btnRoomOneMinusTen.Enabled = chkOverrideHMI.Checked;
+        }
+        private void btnRoomOnePlusTen_Click(object sender, EventArgs e)
+        {
+            double _RoomTemp = _simController.GetRoomTemperature();
+            _simController.UpdateDesiredTemperature(_RoomTemp + 10.0);
+        }
+        private void btnRoomOnePlusFive_Click(object sender, EventArgs e)
+        {
+            double _RoomTemp = _simController.GetRoomTemperature();
+            _simController.UpdateDesiredTemperature(_RoomTemp + 5.0);
+        }
+        private void btnRoomOneMinusFive_Click(object sender, EventArgs e)
+        {
+            double _RoomTemp = _simController.GetRoomTemperature();
+            _simController.UpdateDesiredTemperature(_RoomTemp - 5.0);
+        }
+        private void btnRoomOneMinusTen_Click(object sender, EventArgs e)
+        {
+            double _RoomTemp = _simController.GetRoomTemperature();
+            _simController.UpdateDesiredTemperature(_RoomTemp - 10.0);
+        }
+        private void MainDashboardForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _simController.Stop();
         }
     }
 }

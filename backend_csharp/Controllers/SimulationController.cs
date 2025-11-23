@@ -14,15 +14,17 @@ namespace DormClimateBackend.Controllers
 
     public class SimulationController
     {
+        
+
         private readonly SimulationService _simulationService;
         private readonly ExternalTemperatureService _externalTemp;
         private readonly HvacController _hvacController = new();
         private readonly HvacActuator _hvacActuator = new();
-
-        private double _desiredTemp;
         private readonly TimeSpan _dashboardInterval;
         private readonly IntegrationParameters _integrationParams;
         private volatile bool _running = false;
+        private double _desiredTemp;
+
         public event Action<SimulationState>? OnStateUpdated;
 
         public SimulationController(
@@ -41,7 +43,10 @@ namespace DormClimateBackend.Controllers
 
             _simulationService.Initialize(initialRoomTemp);
         }
-
+        public double GetRoomTemperature()
+        {
+            return _simulationService.GetRoomTemp();
+        }
         public void SetTimeScale(double newScale)
         {
             _simulationService.SetTimeScale(newScale);
@@ -51,6 +56,7 @@ namespace DormClimateBackend.Controllers
         {
             _desiredTemp = newDesiredTemp;
         }
+        
         // --- REALTIME MODE ---
         public void RunRealTime()
         {
