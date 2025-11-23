@@ -702,8 +702,10 @@ namespace DormClimateGUI
             Controls.Add(groupBoxHMI);
             Controls.Add(groupBoxOverride);
             Controls.Add(groupBoxLog);
+            FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "MainDashboardForm";
             Text = "DormClimate Dashboard";
+            Load += MainDashboardForm_Load;
             groupBoxHMI.ResumeLayout(false);
             groupBoxHMI.PerformLayout();
             groupBoxSensor.ResumeLayout(false);
