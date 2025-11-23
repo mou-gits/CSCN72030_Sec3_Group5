@@ -45,7 +45,7 @@ namespace DormClimateGUI
             if (chkRealtime.Checked)
                 _simController.RunRealTime();
             else
-                _simController.RunAccelerated();
+                _simController.RunAccelerated(10.0);
 
             _simController.OnStateUpdated += SimulationController_OnStateUpdated;
         }
@@ -78,10 +78,21 @@ namespace DormClimateGUI
         }
         private void chkRealtime_CheckedChanged(object sender, EventArgs e)
         {
-            // Restart sim at current displayed time, switch mode
-            StopSimulation();
-            StartSimulation();
+            // Always stop the current run before switching
+            _simController.Stop();
+
+            if (chkRealtime.Checked)
+            {
+                // Start realtime mode
+                _simController.RunRealTime();
+            }
+            else
+            {
+                // Start accelerated mode (example: 10× faster)
+                _simController.RunAccelerated(10.0);
+            }
         }
+
         private void cmdStop_Click(object sender, EventArgs e)
         {
             StopSimulation();

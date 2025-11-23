@@ -70,7 +70,7 @@ public class Demo
         if (realTime)
             controller.RunRealTime();
         else
-            controller.RunAccelerated();
+            controller.RunAccelerated(10);
     }
    class Program
     {

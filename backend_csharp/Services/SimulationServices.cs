@@ -36,6 +36,11 @@ public class SimulationService
         _integrationParams = integrationParams;
     }
 
+    public void SetTimeScale(double newScale)
+    {
+        _clock.SetTimeScale(newScale);
+    }
+
     public void Initialize(double initialRoomTemp)
     {
         if (_initialized) return;
@@ -45,12 +50,12 @@ public class SimulationService
         _initialized = true;
     }
 
-    // --- REALTIME MODE ---
-    public void StartRealtime()
+    public void StartSimulation(DateTime resumeTime, double timeScale)
     {
         if (!_initialized)
             throw new InvalidOperationException("SimulationService must be initialized before starting.");
 
+        _clock.Initialize(resumeTime, timeScale); // use passed scale
         _clock.Start();
         _lastSimTime = _clock.GetCurrentSimTime();
         _running = true;
@@ -72,55 +77,13 @@ public class SimulationService
         }).Start();
     }
 
-    // --- ACCELERATED MODE ---
-    public void RunPassiveSimulation(
-     DateTime startTime,
-     TimeSpan samplingInterval,
-     Action<DateTime, double, double> logCallback,                // void-returning
-     Func<DateTime, double, double?, HvacActuator.ActuatorOutput> controlCallback // must return ActuatorOutput
- )
-    {
-        if (!_initialized)
-            throw new InvalidOperationException("SimulationService must be initialized before running.");
 
-        _running = true;
 
-        DateTime currentSampleTime = startTime;
-        DateTime simTime = startTime;
 
-        TimeSpan stepSpan = TimeSpan.FromSeconds(_integrationParams.StepSize);
 
-        while (_running)
-        {
-            double? extTemp = _externalTemp.GetInterpolatedTemperature(simTime);
-            if (extTemp.HasValue)
-            {
-                double roomTemp;
-                lock (_lock) { roomTemp = _roomTemp; }
 
-                var output = controlCallback(simTime, roomTemp, extTemp);
-                SetControl(output.HeaterPercent * 100, output.AcPercent * 100);
 
-                double dTdt = _modelStructure.ComputeRateOfChange(roomTemp, extTemp.Value, _heaterUsage, _acUsage);
-                double deltaT = Math.Clamp(dTdt * _integrationParams.StepSize, -1.0, 1.0);
 
-                lock (_lock) { _roomTemp += deltaT; }
-            }
-
-            simTime += stepSpan;
-
-            if (simTime >= currentSampleTime)
-            {
-                double roomTemp;
-                lock (_lock) { roomTemp = _roomTemp; }
-
-                double? extTempForLog = _externalTemp.GetInterpolatedTemperature(simTime);
-                logCallback(simTime, roomTemp, extTempForLog ?? double.NaN);
-
-                currentSampleTime += samplingInterval;
-            }
-        }
-    }
 
     // --- STOP ---
     public void Stop()
