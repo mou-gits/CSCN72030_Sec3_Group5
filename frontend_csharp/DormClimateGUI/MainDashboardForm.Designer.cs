@@ -74,6 +74,7 @@ namespace DormClimateGUI
             label10 = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
+            lblSimulationStatus = new Label();
             lblDBExtTemp = new Label();
             label9 = new Label();
             lblTime = new Label();
@@ -333,7 +334,7 @@ namespace DormClimateGUI
             cmdStop.TabIndex = 1;
             cmdStop.Text = "Stop System";
             cmdStop.UseVisualStyleBackColor = true;
-            cmdStop.Click += cmdSetExtTemp_Click;
+            cmdStop.Click += btnStop_Click;
             // 
             // cmdStart
             // 
@@ -343,7 +344,7 @@ namespace DormClimateGUI
             cmdStart.TabIndex = 1;
             cmdStart.Text = "Start System";
             cmdStart.UseVisualStyleBackColor = true;
-            cmdStart.Click += cmdSetExtTemp_Click;
+            cmdStart.Click += btnStart_Click;
             // 
             // cmdSetExtTemp
             // 
@@ -369,7 +370,7 @@ namespace DormClimateGUI
             // chkRealtime
             // 
             chkRealtime.AutoSize = true;
-            chkRealtime.Location = new Point(6, 27);
+            chkRealtime.Location = new Point(6, 38);
             chkRealtime.Name = "chkRealtime";
             chkRealtime.Size = new Size(112, 19);
             chkRealtime.TabIndex = 7;
@@ -643,6 +644,7 @@ namespace DormClimateGUI
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(lblSimulationStatus);
             groupBox1.Controls.Add(chkRealtime);
             groupBox1.Controls.Add(lblDBExtTemp);
             groupBox1.Controls.Add(label9);
@@ -655,6 +657,17 @@ namespace DormClimateGUI
             groupBox1.TabStop = false;
             groupBox1.Text = "System";
             groupBox1.Enter += groupBox1_Enter;
+            // 
+            // lblSimulationStatus
+            // 
+            lblSimulationStatus.AutoSize = true;
+            lblSimulationStatus.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSimulationStatus.ForeColor = Color.Blue;
+            lblSimulationStatus.Location = new Point(6, 19);
+            lblSimulationStatus.Name = "lblSimulationStatus";
+            lblSimulationStatus.Size = new Size(106, 15);
+            lblSimulationStatus.TabIndex = 8;
+            lblSimulationStatus.Text = "----- ONLINE -----";
             // 
             // lblDBExtTemp
             // 
@@ -864,5 +877,6 @@ namespace DormClimateGUI
         private Label label9;
         private Label label11;
         private Label label10;
+        private Label lblSimulationStatus;
     }
 }

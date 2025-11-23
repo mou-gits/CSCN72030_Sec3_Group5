@@ -93,21 +93,36 @@ namespace DormClimateGUI
             }
         }
 
-        private void cmdStop_Click(object sender, EventArgs e)
+        private void btnStop_Click(object sender, EventArgs e)
         {
-            StopSimulation();
+            _simController.Stop();
             cmdStart.Enabled = true;
             cmdStop.Enabled = false;
-        }
-        private void cmdStart_Click(object sender, EventArgs e)
-        {
-            _currentSimTime = DateTime.UtcNow;
-            lblTime.Text = _currentSimTime.ToLocalTime().ToString("HH:mm:ss");
-            UpdateExternalTemp(_currentSimTime);
 
-            StartSimulation();
+            lblSimulationStatus.Text = "---- OFFLINE ----";
+            lblSimulationStatus.ForeColor = Color.Red;
+            lblSimulationStatus.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+        }
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            // Ensure any previous run is stopped
+            _simController.Stop();
+
+
+            if (chkRealtime.Checked)
+            {
+                _simController.RunRealTime();
+            }
+            else
+            {
+                _simController.RunAccelerated(10.0); // or configurable factor
+            }
             cmdStart.Enabled = false;
             cmdStop.Enabled = true;
+
+            lblSimulationStatus.Text = "----- ONLINE -----";
+            lblSimulationStatus.ForeColor = Color.Blue;
+            lblSimulationStatus.Font = new Font("Segoe UI", 9, FontStyle.Bold);
         }
         private void MainDashboardForm_Load(object sender, EventArgs e)
         {
