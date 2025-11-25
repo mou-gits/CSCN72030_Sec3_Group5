@@ -141,6 +141,9 @@ namespace DormClimateGUI
         // Connect to the selected device when the "Connect Sensor" button is clicked
         private async void cmdConnectSensor_Click(object sender, EventArgs e)
         {
+            _bleManager.StopScan();
+            _logger.Log("Stopped scanning for BLE devices.");
+
             if (cmdSensorDevices.SelectedItem is DeviceEntry entry)
             {
                 // Attempt connection
@@ -308,5 +311,9 @@ namespace DormClimateGUI
             _simController.Stop();
         }
 
+        private void cmdConnectSensor_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

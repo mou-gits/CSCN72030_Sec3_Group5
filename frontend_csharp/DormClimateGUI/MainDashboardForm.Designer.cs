@@ -227,6 +227,7 @@ namespace DormClimateGUI
             cmdConnectSensor.TabIndex = 7;
             cmdConnectSensor.Text = "Connect Device";
             cmdConnectSensor.UseVisualStyleBackColor = true;
+            cmdConnectSensor.Click += cmdConnectSensor_Click;
             // 
             // cmdSensorDevices
             // 
@@ -244,6 +245,7 @@ namespace DormClimateGUI
             cmbSearchSensor.TabIndex = 4;
             cmbSearchSensor.Text = "Search BlueTooth Devices";
             cmbSearchSensor.UseVisualStyleBackColor = true;
+            cmbSearchSensor.Click += cmbSearchSensor_Click;
             // 
             // txtSensorDeviceId
             // 
