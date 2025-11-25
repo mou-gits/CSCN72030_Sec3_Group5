@@ -1,4 +1,5 @@
-﻿using System;
+﻿using backend_csharp.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DormClimateGUI.UI_utilities
 {
-    public class UiLogger
+    public class UiLogger :ILogger
     {
         private readonly RichTextBox _logBox;
         private readonly Form _form;

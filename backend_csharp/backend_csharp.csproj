@@ -6,8 +6,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
     <!-- Target .NET 8 with Windows Runtime APIs -->
-    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
-    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
