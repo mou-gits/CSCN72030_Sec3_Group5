@@ -1,4 +1,5 @@
-﻿using DormClimateBackend.Controllers;
+﻿using backend_csharp.Utilities;
+using DormClimateBackend.Controllers;
 using DormClimateBackend.Services;
 using DormClimateGUI.UI_utilities;
 
@@ -11,6 +12,7 @@ namespace DormClimateGUI
         private DateTime _currentSimTime;
         private UiLogger _logger;
         private Double _timeScale = 60.0; // 1.0 = real-time, >1.0 = accelerated
+        private BLEManager _bleManager;
 
         public MainDashboardForm(SimulationController simController, ExternalTemperatureService externalTempService)
         {
@@ -51,7 +53,56 @@ namespace DormClimateGUI
             chkOverrideHMI.Checked = false;
             SetHMIButtons();
 
+            // Pass logger into BLEManager
+            _bleManager = new BLEManager(_logger);
+
+            // Subscribe to backend events
+            _bleManager.OnDeviceFound += BleManager_OnDeviceFound;
+            _bleManager.OnLog += BleManager_OnLog;
+            _bleManager.OnDeviceInfoReady += BleManager_OnDeviceInfoReady;
+
+            //Start the HVAC Engine simulation
             StartSimulation();          // begin in realtime mode
+        }
+        // Called whenever a new BLE device is discovered
+        private void BleManager_OnDeviceFound(DeviceEntry entry)
+        {
+            if (cmdSensorDevices.InvokeRequired)
+            {
+                cmdSensorDevices.Invoke(new Action(() =>
+                {
+                    cmdSensorDevices.Items.Add(entry);
+                }));
+            }
+            else
+            {
+                cmdSensorDevices.Items.Add(entry);
+            }
+        }
+
+        // Called whenever the BLEManager wants to log a message
+        private void BleManager_OnLog(string message)
+        {
+            // Use your UiLogger to write into the RichTextBox
+            _logger.Log(message);
+        }
+
+        // Called when BLEManager has finished gathering info about a connected device
+        private void BleManager_OnDeviceInfoReady(string deviceId, string gattSummary)
+        {
+            if (txtSensorDeviceId.InvokeRequired || txtSensor.InvokeRequired)
+            {
+                txtSensorDeviceId.Invoke(new Action(() =>
+                {
+                    txtSensorDeviceId.Text = deviceId;
+                    txtSensor.Text = gattSummary;
+                }));
+            }
+            else
+            {
+                txtSensorDeviceId.Text = deviceId;
+                txtSensor.Text = gattSummary;
+            }
         }
         private void chkOverrideExternal_CheckedChanged(object sender, EventArgs e)
         {
@@ -72,6 +123,38 @@ namespace DormClimateGUI
 
                 // Switch service back to database mode
                 _externalTempService.UseDatabase();
+            }
+        }
+        // Start scanning when the "Search Sensor" button is clicked
+        private void cmbSearchSensor_Click(object sender, EventArgs e)
+        {
+            // Clear previous results
+            cmdSensorDevices.Items.Clear();
+            txtSensorDeviceId.Clear();
+            txtSensor.Clear();
+
+            // Start BLE scan
+            _bleManager.StartScan();
+            _logger.Log("Started scanning for BLE devices...");
+        }
+
+        // Connect to the selected device when the "Connect Sensor" button is clicked
+        private async void cmdConnectSensor_Click(object sender, EventArgs e)
+        {
+            if (cmdSensorDevices.SelectedItem is DeviceEntry entry)
+            {
+                // Attempt connection
+                string summary = await _bleManager.ConnectAsync(entry.Id);
+
+                // Update UI
+                txtSensorDeviceId.Text = entry.Id;
+                txtSensor.Text = summary;
+
+                _logger.Log($"Connected to {entry.Display}");
+            }
+            else
+            {
+                MessageBox.Show("Please select a device from the list before connecting.");
             }
         }
         private void StartSimulation()
@@ -224,5 +307,6 @@ namespace DormClimateGUI
         {
             _simController.Stop();
         }
+
     }
 }
