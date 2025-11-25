@@ -74,6 +74,7 @@ namespace DormClimateGUI
             label10 = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
+            lblSimulationStatus = new Label();
             lblDBExtTemp = new Label();
             label9 = new Label();
             lblTime = new Label();
@@ -107,7 +108,6 @@ namespace DormClimateGUI
             groupBoxHMI.TabIndex = 0;
             groupBoxHMI.TabStop = false;
             groupBoxHMI.Text = "HMI Device";
-            groupBoxHMI.Enter += groupBoxHMI_Enter;
             // 
             // cmbHMIdevices
             // 
@@ -124,7 +124,6 @@ namespace DormClimateGUI
             txtHMIExternalTemperature.ReadOnly = true;
             txtHMIExternalTemperature.Size = new Size(100, 23);
             txtHMIExternalTemperature.TabIndex = 5;
-            txtHMIExternalTemperature.TextChanged += textBox4_TextChanged;
             // 
             // txtHMIDesiredTemperature
             // 
@@ -133,7 +132,6 @@ namespace DormClimateGUI
             txtHMIDesiredTemperature.ReadOnly = true;
             txtHMIDesiredTemperature.Size = new Size(100, 23);
             txtHMIDesiredTemperature.TabIndex = 5;
-            txtHMIDesiredTemperature.TextChanged += textBox3_TextChanged;
             // 
             // txtHMIDeviceID
             // 
@@ -142,7 +140,6 @@ namespace DormClimateGUI
             txtHMIDeviceID.ReadOnly = true;
             txtHMIDeviceID.Size = new Size(100, 23);
             txtHMIDeviceID.TabIndex = 5;
-            txtHMIDeviceID.TextChanged += txtHMIRoomTemperature_TextChanged;
             // 
             // txtHMIRoomTemperature
             // 
@@ -151,7 +148,6 @@ namespace DormClimateGUI
             txtHMIRoomTemperature.ReadOnly = true;
             txtHMIRoomTemperature.Size = new Size(100, 23);
             txtHMIRoomTemperature.TabIndex = 5;
-            txtHMIRoomTemperature.TextChanged += txtHMIRoomTemperature_TextChanged;
             // 
             // cmdConnectHMI
             // 
@@ -179,7 +175,6 @@ namespace DormClimateGUI
             lblHMIExternalTemperature.Size = new Size(135, 15);
             lblHMIExternalTemperature.TabIndex = 3;
             lblHMIExternalTemperature.Text = "Displayed External Temp";
-            lblHMIExternalTemperature.Click += label1_Click;
             // 
             // lblHMIDesiredTemperature
             // 
@@ -189,7 +184,6 @@ namespace DormClimateGUI
             lblHMIDesiredTemperature.Size = new Size(116, 15);
             lblHMIDesiredTemperature.TabIndex = 2;
             lblHMIDesiredTemperature.Text = "Desired Temperature";
-            lblHMIDesiredTemperature.Click += lblHMIDesiredTemperature_Click;
             // 
             // lblHMIRoomTemperature
             // 
@@ -199,7 +193,6 @@ namespace DormClimateGUI
             lblHMIRoomTemperature.Size = new Size(126, 15);
             lblHMIRoomTemperature.TabIndex = 1;
             lblHMIRoomTemperature.Text = "Displayed Room Temp";
-            lblHMIRoomTemperature.Click += label2_Click;
             // 
             // lblHMIDeviceID
             // 
@@ -209,7 +202,6 @@ namespace DormClimateGUI
             lblHMIDeviceID.Size = new Size(82, 15);
             lblHMIDeviceID.TabIndex = 0;
             lblHMIDeviceID.Text = "HMI Device ID";
-            lblHMIDeviceID.Click += lblHMIDeviceID_Click;
             // 
             // groupBoxSensor
             // 
@@ -252,7 +244,6 @@ namespace DormClimateGUI
             cmbSearchSensor.TabIndex = 4;
             cmbSearchSensor.Text = "Search BlueTooth Devices";
             cmbSearchSensor.UseVisualStyleBackColor = true;
-            cmbSearchSensor.Click += button1_Click;
             // 
             // txtSensorDeviceId
             // 
@@ -261,7 +252,6 @@ namespace DormClimateGUI
             txtSensorDeviceId.ReadOnly = true;
             txtSensorDeviceId.Size = new Size(121, 23);
             txtSensorDeviceId.TabIndex = 5;
-            txtSensorDeviceId.TextChanged += txtHMIRoomTemperature_TextChanged;
             // 
             // txtSensor
             // 
@@ -270,7 +260,6 @@ namespace DormClimateGUI
             txtSensor.ReadOnly = true;
             txtSensor.Size = new Size(121, 23);
             txtSensor.TabIndex = 5;
-            txtSensor.TextChanged += txtHMIRoomTemperature_TextChanged;
             // 
             // lblSensorDeviceId
             // 
@@ -280,7 +269,6 @@ namespace DormClimateGUI
             lblSensorDeviceId.Size = new Size(94, 15);
             lblSensorDeviceId.TabIndex = 0;
             lblSensorDeviceId.Text = "Sensor Device ID";
-            lblSensorDeviceId.Click += lblHMIDeviceID_Click;
             // 
             // lblSensor
             // 
@@ -290,7 +278,6 @@ namespace DormClimateGUI
             lblSensor.Size = new Size(112, 15);
             lblSensor.TabIndex = 1;
             lblSensor.Text = "Sensor Temperature";
-            lblSensor.Click += label2_Click;
             // 
             // groupBoxOverride
             // 
@@ -310,20 +297,18 @@ namespace DormClimateGUI
             // lblExtTemp
             // 
             lblExtTemp.AutoSize = true;
-            lblExtTemp.Location = new Point(6, 69);
+            lblExtTemp.Location = new Point(6, 67);
             lblExtTemp.Name = "lblExtTemp";
             lblExtTemp.Size = new Size(55, 15);
             lblExtTemp.TabIndex = 3;
             lblExtTemp.Text = "Ext Temp";
-            lblExtTemp.Click += lblExtTemp_Click;
             // 
             // txtExtTemp
             // 
-            txtExtTemp.Location = new Point(76, 65);
+            txtExtTemp.Location = new Point(78, 62);
             txtExtTemp.Name = "txtExtTemp";
             txtExtTemp.Size = new Size(49, 23);
             txtExtTemp.TabIndex = 2;
-            txtExtTemp.TextChanged += textBox1_TextChanged;
             // 
             // cmdStop
             // 
@@ -333,7 +318,7 @@ namespace DormClimateGUI
             cmdStop.TabIndex = 1;
             cmdStop.Text = "Stop System";
             cmdStop.UseVisualStyleBackColor = true;
-            cmdStop.Click += cmdSetExtTemp_Click;
+            cmdStop.Click += btnStop_Click;
             // 
             // cmdStart
             // 
@@ -343,11 +328,11 @@ namespace DormClimateGUI
             cmdStart.TabIndex = 1;
             cmdStart.Text = "Start System";
             cmdStart.UseVisualStyleBackColor = true;
-            cmdStart.Click += cmdSetExtTemp_Click;
+            cmdStart.Click += btnStart_Click;
             // 
             // cmdSetExtTemp
             // 
-            cmdSetExtTemp.Location = new Point(5, 99);
+            cmdSetExtTemp.Location = new Point(5, 98);
             cmdSetExtTemp.Name = "cmdSetExtTemp";
             cmdSetExtTemp.Size = new Size(122, 23);
             cmdSetExtTemp.TabIndex = 1;
@@ -358,7 +343,7 @@ namespace DormClimateGUI
             // chkOverrideExternal
             // 
             chkOverrideExternal.AutoSize = true;
-            chkOverrideExternal.Location = new Point(6, 36);
+            chkOverrideExternal.Location = new Point(6, 32);
             chkOverrideExternal.Name = "chkOverrideExternal";
             chkOverrideExternal.Size = new Size(122, 19);
             chkOverrideExternal.TabIndex = 0;
@@ -369,7 +354,7 @@ namespace DormClimateGUI
             // chkRealtime
             // 
             chkRealtime.AutoSize = true;
-            chkRealtime.Location = new Point(6, 27);
+            chkRealtime.Location = new Point(6, 38);
             chkRealtime.Name = "chkRealtime";
             chkRealtime.Size = new Size(112, 19);
             chkRealtime.TabIndex = 7;
@@ -398,7 +383,7 @@ namespace DormClimateGUI
             // 
             // cmdClear
             // 
-            cmdClear.Location = new Point(550, 97);
+            cmdClear.Location = new Point(550, 99);
             cmdClear.Name = "cmdClear";
             cmdClear.Size = new Size(65, 23);
             cmdClear.TabIndex = 0;
@@ -502,10 +487,12 @@ namespace DormClimateGUI
             chkOverrideHMI.AutoSize = true;
             chkOverrideHMI.Location = new Point(344, 12);
             chkOverrideHMI.Name = "chkOverrideHMI";
-            chkOverrideHMI.Size = new Size(116, 19);
+            chkOverrideHMI.Size = new Size(97, 19);
             chkOverrideHMI.TabIndex = 8;
-            chkOverrideHMI.Text = "Override Request";
+            chkOverrideHMI.TabStop = false;
+            chkOverrideHMI.Text = "Override HMI";
             chkOverrideHMI.UseVisualStyleBackColor = true;
+            chkOverrideHMI.CheckedChanged += chkOverrideHMI_CheckedChanged;
             // 
             // btnRoomOneMinusTen
             // 
@@ -515,6 +502,7 @@ namespace DormClimateGUI
             btnRoomOneMinusTen.TabIndex = 7;
             btnRoomOneMinusTen.Text = "- 10";
             btnRoomOneMinusTen.UseVisualStyleBackColor = true;
+            btnRoomOneMinusTen.Click += btnRoomOneMinusTen_Click;
             // 
             // btnRoomOneMinusFive
             // 
@@ -524,6 +512,7 @@ namespace DormClimateGUI
             btnRoomOneMinusFive.TabIndex = 7;
             btnRoomOneMinusFive.Text = "- 5";
             btnRoomOneMinusFive.UseVisualStyleBackColor = true;
+            btnRoomOneMinusFive.Click += btnRoomOneMinusFive_Click;
             // 
             // btnRoomOnePlusFive
             // 
@@ -533,6 +522,7 @@ namespace DormClimateGUI
             btnRoomOnePlusFive.TabIndex = 7;
             btnRoomOnePlusFive.Text = "+ 5";
             btnRoomOnePlusFive.UseVisualStyleBackColor = true;
+            btnRoomOnePlusFive.Click += btnRoomOnePlusFive_Click;
             // 
             // btnRoomOnePlusTen
             // 
@@ -542,6 +532,7 @@ namespace DormClimateGUI
             btnRoomOnePlusTen.TabIndex = 7;
             btnRoomOnePlusTen.Text = "+ 10";
             btnRoomOnePlusTen.UseVisualStyleBackColor = true;
+            btnRoomOnePlusTen.Click += btnRoomOnePlusTen_Click;
             // 
             // label6
             // 
@@ -639,10 +630,10 @@ namespace DormClimateGUI
             label7.Size = new Size(372, 50);
             label7.TabIndex = 0;
             label7.Text = "Not Yet Implemented";
-            label7.Click += label7_Click;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(lblSimulationStatus);
             groupBox1.Controls.Add(chkRealtime);
             groupBox1.Controls.Add(lblDBExtTemp);
             groupBox1.Controls.Add(label9);
@@ -654,7 +645,17 @@ namespace DormClimateGUI
             groupBox1.TabIndex = 6;
             groupBox1.TabStop = false;
             groupBox1.Text = "System";
-            groupBox1.Enter += groupBox1_Enter;
+            // 
+            // lblSimulationStatus
+            // 
+            lblSimulationStatus.AutoSize = true;
+            lblSimulationStatus.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSimulationStatus.ForeColor = Color.Blue;
+            lblSimulationStatus.Location = new Point(6, 19);
+            lblSimulationStatus.Name = "lblSimulationStatus";
+            lblSimulationStatus.Size = new Size(106, 15);
+            lblSimulationStatus.TabIndex = 8;
+            lblSimulationStatus.Text = "----- ONLINE -----";
             // 
             // lblDBExtTemp
             // 
@@ -664,7 +665,6 @@ namespace DormClimateGUI
             lblDBExtTemp.Size = new Size(36, 15);
             lblDBExtTemp.TabIndex = 1;
             lblDBExtTemp.Text = "--  °C";
-            lblDBExtTemp.Click += lblDBExtTemp_Click;
             // 
             // label9
             // 
@@ -702,8 +702,10 @@ namespace DormClimateGUI
             Controls.Add(groupBoxHMI);
             Controls.Add(groupBoxOverride);
             Controls.Add(groupBoxLog);
+            FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "MainDashboardForm";
             Text = "DormClimate Dashboard";
+            FormClosing += MainDashboardForm_FormClosing;
             groupBoxHMI.ResumeLayout(false);
             groupBoxHMI.PerformLayout();
             groupBoxSensor.ResumeLayout(false);
@@ -719,85 +721,6 @@ namespace DormClimateGUI
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);
-        }
-
-        private void lblDBExtTemp_Click(object sender, EventArgs e)
-        {
-       
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-   
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chkOverrideExternal_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cmdSetExtTemp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblExtTemp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
- 
-        }
-
-        private void lblHMIDeviceID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        { 
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-     
-        }
-
-        private void groupBoxHMI_Enter(object sender, EventArgs e)
-        {
-      
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-        
-        }
-
-        private void txtHMIRoomTemperature_TextChanged(object sender, EventArgs e)
-        {
-    
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-     
-        }
-
-        private void lblHMIDesiredTemperature_Click(object sender, EventArgs e)
-        {
-           
         }
 
         #endregion
@@ -862,5 +785,6 @@ namespace DormClimateGUI
         private Label label9;
         private Label label11;
         private Label label10;
+        private Label lblSimulationStatus;
     }
 }
