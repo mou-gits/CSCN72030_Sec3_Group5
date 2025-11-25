@@ -14,8 +14,6 @@ namespace DormClimateBackend.Controllers
 
     public class SimulationController
     {
-        
-
         private readonly SimulationService _simulationService;
         private readonly ExternalTemperatureService _externalTemp;
         private readonly HvacController _hvacController = new();
