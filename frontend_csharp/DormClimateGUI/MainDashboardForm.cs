@@ -17,6 +17,7 @@ namespace DormClimateGUI
         public MainDashboardForm(SimulationController simController, ExternalTemperatureService externalTempService)
         {
             InitializeComponent();
+
             _logger = new UiLogger(this, rtbLog);
 
             // Example usage
@@ -64,7 +65,7 @@ namespace DormClimateGUI
             //Start the HVAC Engine simulation
             StartSimulation();          // begin in realtime mode
         }
-        // Called whenever a new BLE device is discovered
+         // Called whenever a new BLE device is discovered
         private void BleManager_OnDeviceFound(DeviceEntry entry)
         {
             if (cmdSensorDevices.InvokeRequired)
@@ -199,7 +200,8 @@ namespace DormClimateGUI
             lblRoom1ExternalTemp.Text = $"{state.ExternalTemperature:F1} °C";
 
             // HVAC status (action description)
-            lblRoom1HVACstatus.Text = state.HvacMode.ToString();
+            // lblRoom1HVACstatus.Text = state.HvacMode.ToString();
+            lblRoom1HVACstatus.Text = state.HvacMode.ToDisplayString();
 
             // Heater and AC percentages
             lblRoom1Heater.Text = $"{state.ActuatorOutput.HeaterPercent * 100:F0} %";
@@ -309,11 +311,6 @@ namespace DormClimateGUI
         private void MainDashboardForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _simController.Stop();
-        }
-
-        private void cmdConnectSensor_Click_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
