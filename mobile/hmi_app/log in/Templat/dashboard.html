@@ -1,8 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-<h2>Welcome, {{ session.get('user_name') or session.get('user_email') }}!</h2>
-<p class="mt-3">
-    You are logged in. In future sprints this page will show your driving data.
-</p>
-{% endblock %}
