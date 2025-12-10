@@ -1,5 +1,25 @@
 ﻿namespace DormClimateBackend.Controllers
 {
+    public static class HvacActionExtensions
+    {
+        public static string ToDisplayString(this HvacController.HvacAction action)
+        {
+            return action switch
+            {
+                HvacController.HvacAction.HighestCooling => "Cooling 100%",
+                HvacController.HvacAction.Cooling_075 => "Cooling 75%",
+                HvacController.HvacAction.Cooling_050 => "Cooling 50%",
+                HvacController.HvacAction.Cooling_025 => "Cooling 25%",
+                HvacController.HvacAction.DoNothing => "Idle",
+                HvacController.HvacAction.Heating_025 => "Heating 25%",
+                HvacController.HvacAction.Heating_050 => "Heating 50%",
+                HvacController.HvacAction.Heating_075 => "Heating 75%",
+                HvacController.HvacAction.HighestHeating => "Heating 100%",
+                _ => action.ToString()
+            };
+        }
+    }
+
     public class HvacController
     {
         public enum HvacAction

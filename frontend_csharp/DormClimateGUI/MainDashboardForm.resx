@@ -117,16 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="txtHMIExternalTemperature.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="txtHMIDesiredTemperature.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="txtHMIDeviceID.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="txtHMIRoomTemperature.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <data name="textBox3.Text" xml:space="preserve">
+    <value>You can view the live room temperature alongside the desired setpoint and the outside temperature. 
+The dashboard also indicates what the AC and heater are doing, as well as the overall HVAC system status. 
+Use the override buttons (+10, +5, –5, –10, etc.) to adjust the requested temperature directly. 
+A live plot provides a visual profile of how the room temperature responds over time.
+</value>
+  </data>
+  <data name="richTextBox2.Text" xml:space="preserve">
+    <value>This section demonstrates how the HVAC system connects to a sensor using Bluetooth. In a full production environment, the system would pair with a dedicated BLE temperature sensor installed  in each room to provide accurate, real‑time readings of the indoor climate.  
+
+For the purposes of this demo, we are using a mobile phone as a surrogate sensor. 
+
+The phone’s built‑in battery temperature is read through the BLE connection and used as the input signal for the control system.</value>
+  </data>
+  <data name="textBox2.Text" xml:space="preserve">
+    <value>This section is designed for testing and validation. 
+Here you can override the external temperature input to simulate different conditions 
+and observe how the control system responds. These tools are intended for debugging and are not part of normal tenant interaction.</value>
+  </data>
+  <data name="textBox4.Text" xml:space="preserve">
+    <value>This section provides the main operational controls for the HVAC system. You can start or stop the controller, switch between real‑time and fast‑time simulation modes, and monitor the system’s active status. These controls represent the standard workflow for normal operation.</value>
+  </data>
 </root>

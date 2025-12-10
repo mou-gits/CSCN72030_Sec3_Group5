@@ -2,6 +2,10 @@
 using DormClimateBackend.Controllers;
 using DormClimateBackend.Services;
 using DormClimateGUI.UI_utilities;
+using ScottPlot;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace DormClimateGUI
 {
@@ -14,9 +18,98 @@ namespace DormClimateGUI
         private Double _timeScale = 60.0; // 1.0 = real-time, >1.0 = accelerated
         private BLEManager _bleManager;
 
+        // Store DateTime x-values to render true timestamps
+        private readonly List<DateTime> times = new();
+        private readonly List<double> roomTemps = new();
+        private readonly List<double> desiredTemps = new();
+        private readonly List<double> externalTemps = new();
+
+        // Window settings
+        private const int WindowSeconds = 300; // rolling width of 300 seconds
+        private const double YMin = 05;        // adjust to your expected range
+        private const double YMax = 40;
+
+        private void UpdatePlot(DateTime start, DateTime end)
+        {
+            formsPlot1.Plot.Clear();
+
+            var xs = times.Select(t => t.ToOADate()).ToArray();
+
+            var roomLine = formsPlot1.Plot.Add.Scatter(xs, roomTemps.ToArray(),
+                color: new ScottPlot.Color(System.Drawing.Color.Red));
+            roomLine.MarkerShape = MarkerShape.None;
+
+            var desiredLine = formsPlot1.Plot.Add.Scatter(xs, desiredTemps.ToArray(),
+                color: new ScottPlot.Color(System.Drawing.Color.Green));
+            desiredLine.MarkerShape = MarkerShape.None;
+
+            var externalLine = formsPlot1.Plot.Add.Scatter(xs, externalTemps.ToArray(),
+                color: new ScottPlot.Color(System.Drawing.Color.Blue));
+            externalLine.MarkerShape = MarkerShape.None;
+
+            // X-axis: scrolling window
+            // Always show the last WindowSeconds worth of data
+            var latest = times[^1];
+            var windowStart = latest.AddSeconds(-WindowSeconds);
+            formsPlot1.Plot.Axes.SetLimitsX(windowStart.ToOADate(), latest.ToOADate());
+            formsPlot1.Plot.Axes.DateTimeTicksBottom();
+
+            // Y-axis: smart scaling
+            double minY = new[] { roomTemps.Min(), desiredTemps.Min(), externalTemps.Min() }.Min();
+            double maxY = new[] { roomTemps.Max(), desiredTemps.Max(), externalTemps.Max() }.Max();
+            double padding = (maxY - minY) * 0.1;
+            formsPlot1.Plot.Axes.SetLimitsY(minY - padding, maxY + padding);
+
+            formsPlot1.Refresh();
+        }
+
+        // Event handler raised from a background thread → marshal to UI thread
+        private void SimController_OnStateUpdated(SimulationState state)
+        {
+            // Append new data to buffers
+            times.Add(state.SimTime);
+            roomTemps.Add(state.RoomTemperature);
+            desiredTemps.Add(_simController.GetDesiredTemperature());
+            externalTemps.Add(state.ExternalTemperature);
+
+            // Parity with real/accelerated time:
+            // Refresh only once the latest time exceeds the current window end
+            var latest = times[^1];
+            var start = latest.AddSeconds(-WindowSeconds);
+
+            // Marshal plotting to UI thread
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => UpdatePlot(start, latest)));
+            }
+            else
+            {
+                UpdatePlot(start, latest);
+            }
+        }
+
         public MainDashboardForm(SimulationController simController, ExternalTemperatureService externalTempService)
         {
             InitializeComponent();
+
+            _simController = simController ?? throw new ArgumentNullException(nameof(simController));
+            _simController.OnStateUpdated += SimController_OnStateUpdated;
+
+            formsPlot1.Enabled = false;
+
+            // No title
+            formsPlot1.Plot.Title(null);
+
+            // Labels (optional)
+            formsPlot1.Plot.XLabel("Time");
+            formsPlot1.Plot.YLabel("Temperature (°C)");
+
+            // DateTime ticks on bottom axis
+            formsPlot1.Plot.Axes.DateTimeTicksBottom();
+
+            // Fix Y axis to a stable range
+            formsPlot1.Plot.Axes.SetLimitsY(YMin, YMax);
+
             _logger = new UiLogger(this, rtbLog);
 
             // Example usage
@@ -64,6 +157,7 @@ namespace DormClimateGUI
             //Start the HVAC Engine simulation
             StartSimulation();          // begin in realtime mode
         }
+
         // Called whenever a new BLE device is discovered
         private void BleManager_OnDeviceFound(DeviceEntry entry)
         {
@@ -199,7 +293,8 @@ namespace DormClimateGUI
             lblRoom1ExternalTemp.Text = $"{state.ExternalTemperature:F1} °C";
 
             // HVAC status (action description)
-            lblRoom1HVACstatus.Text = state.HvacMode.ToString();
+            // lblRoom1HVACstatus.Text = state.HvacMode.ToString();
+            lblRoom1HVACstatus.Text = state.HvacMode.ToDisplayString();
 
             // Heater and AC percentages
             lblRoom1Heater.Text = $"{state.ActuatorOutput.HeaterPercent * 100:F0} %";
@@ -240,8 +335,8 @@ namespace DormClimateGUI
             cmdStop.Enabled = false;
 
             lblSimulationStatus.Text = "---- OFFLINE ----";
-            lblSimulationStatus.ForeColor = Color.Red;
-            lblSimulationStatus.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            lblSimulationStatus.ForeColor = System.Drawing.Color.Red;
+            lblSimulationStatus.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Bold);
             _logger.Log("Simulation Stopped - HVAC System Offline.");
         }
         private void btnStart_Click(object sender, EventArgs e)
@@ -255,8 +350,8 @@ namespace DormClimateGUI
             cmdStop.Enabled = true;
 
             lblSimulationStatus.Text = "----- ONLINE -----";
-            lblSimulationStatus.ForeColor = Color.Blue;
-            lblSimulationStatus.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            lblSimulationStatus.ForeColor = System.Drawing.Color.Blue;
+            lblSimulationStatus.Font = new Font("Segoe UI", 9, System.Drawing.FontStyle.Bold);
             _logger.Log("Simulation Started - HVAC System Online.");
         }
         private void cmdSetExtTemp_Click(object sender, EventArgs e)
@@ -309,11 +404,6 @@ namespace DormClimateGUI
         private void MainDashboardForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _simController.Stop();
-        }
-
-        private void cmdConnectSensor_Click_1(object sender, EventArgs e)
-        {
-
         }
     }
 }

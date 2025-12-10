@@ -20,13 +20,13 @@ This repo contains all components of the system:
 
 ## Architecture Summary
 
-| Component              | Platform     | Tech Stack         | Role |
-|------------------------|--------------|---------------------|------|
-| Backend Controller     | Windows      | C# (.NET)           | SCADA logic, BLE pairing, DB access |
-| GUI Frontend           | Windows      | C# WinForms         | Visual display of telemetry and actuator states |
-| Mobile HMI App         | Android      | Flutter + BLE       | Sends desired temperature to backend |
-| Sensor Surrogate       | Android      | Flutter + BLE       | Advertises battery temperature |
-| Database               | Local (Windows) | SQLite or SQL Server LocalDB | Stores telemetry, actuator logs, outside temperature |
+| Component          | Platform        | Tech Stack                   | Role                                                 |
+| ------------------ | --------------- | ---------------------------- | ---------------------------------------------------- |
+| Backend Controller | Windows         | C# (.NET)                    | SCADA logic, BLE pairing, DB access                  |
+| GUI Frontend       | Windows         | C# WinForms                  | Visual display of telemetry and actuator states      |
+| Mobile HMI App     | Android         | Flutter + BLE                | Sends desired temperature to backend                 |
+| Sensor Surrogate   | Android         | Flutter + BLE                | Advertises battery temperature                       |
+| Database           | Local (Windows) | SQLite or SQL Server LocalDB | Stores telemetry, actuator logs, outside temperature |
 
 ---
 
@@ -63,6 +63,7 @@ This repo contains all components of the system:
 ## Setup Instructions
 
 Each module has its own `README.md` with setup instructions:
+
 - `backend_csharp/README.md`
 - `gui_frontend/README.md`
 - `mobile/hmi_app/README.md`
@@ -74,8 +75,9 @@ Each module has its own `README.md` with setup instructions:
 ## Team Members
 
 - Moutushi – Backend logic, BLE integration, GUI coordination
-- Arman – Mobile BLE surrogate and HMI integration
-- [Add others as needed]
+- Arman – Mobile BLE surrogate and HMI integration (NOT COMPLETED)
+- Kenneth
+- Tanveer -
 
 ---
 
@@ -91,4 +93,4 @@ Each module has its own `README.md` with setup instructions:
 
 ## Notes
 
-- All commits, issues, and pull requests are traceable and reviewed 
+- All commits, issues, and pull requests are traceable and reviewed

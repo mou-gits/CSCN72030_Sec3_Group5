@@ -13,11 +13,9 @@ namespace DormClimateGUI
             ApplicationConfiguration.Initialize();
 
             // --- Construct backend services ---
-
-            var repoFolder = "C:\\Work\\Moutushi Sarkar\\codes\\CSCN72030_Sec3_Group5";
-            var dbPath = PathLocator.LocateDBPath(repoFolder, "DormClimate.db");
+            var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
+            var dbPath = Path.Combine(exeFolder, "DormClimate.db");
             var externalTempService = new ExternalTemperatureService(dbPath);
-
 
             // 2. Define model and integration parameters
             var modelParams = new ModelParameters

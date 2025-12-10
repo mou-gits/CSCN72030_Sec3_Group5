@@ -41,6 +41,11 @@ namespace DormClimateBackend.Controllers
 
             _simulationService.Initialize(initialRoomTemp);
         }
+
+        public DateTime GetCurrentSimTime()
+        {
+            return _simulationService.GetCurrentSimTime();
+        }
         public double GetRoomTemperature()
         {
             return _simulationService.GetRoomTemp();
@@ -72,7 +77,8 @@ namespace DormClimateBackend.Controllers
                 {
                     DateTime currentSimTime = _simulationService.GetCurrentSimTime();
 
-                    // Physics updates
+                    int physicsTickCounter = 0;
+
                     while (lastPhysicsUpdate + TimeSpan.FromSeconds(_integrationParams.StepSize) <= currentSimTime)
                     {
                         lastPhysicsUpdate += TimeSpan.FromSeconds(_integrationParams.StepSize);
@@ -85,21 +91,77 @@ namespace DormClimateBackend.Controllers
                             var output = ComputeControl(lastPhysicsUpdate, roomTemp, extTemp.Value);
                             _simulationService.SetControl(output.HeaterPercent * 100, output.AcPercent * 100);
                         }
+
+                        physicsTickCounter++;
+
+                        // Every 3 ticks, raise a dashboard event
+                        if (physicsTickCounter % 3 == 0)
+                        {
+                            //double roomTemp = _simulationService.GetRoomTemp();
+                            //double? extTemp = _externalTemp.GetInterpolatedTemperature(lastPhysicsUpdate);
+                            //if (!extTemp.HasValue) continue;
+
+                            var action = _hvacController.GetHvacAction(roomTemp, _desiredTemp, extTemp.Value);
+                            var output = _hvacActuator.Translate(action);
+
+                            OnStateUpdated?.Invoke(new SimulationState(lastPhysicsUpdate, roomTemp, extTemp.Value, action, output));
+                        }
                     }
 
-                    // Dashboard updates
-                    if (currentSimTime >= lastDashboardUpdate + _dashboardInterval)
+
+
+
+
+
+
+                    //// Physics updates
+                    //while (lastPhysicsUpdate + TimeSpan.FromSeconds(_integrationParams.StepSize) <= currentSimTime)
+                    //{
+                    //    lastPhysicsUpdate += TimeSpan.FromSeconds(_integrationParams.StepSize);
+                    //    _simulationService.ForceTickAt(lastPhysicsUpdate);
+
+                    //    double roomTemp = _simulationService.GetRoomTemp();
+                    //    double? extTemp = _externalTemp.GetInterpolatedTemperature(lastPhysicsUpdate);
+                    //    if (extTemp.HasValue)
+                    //    {
+                    //        var output = ComputeControl(lastPhysicsUpdate, roomTemp, extTemp.Value);
+                    //        _simulationService.SetControl(output.HeaterPercent * 100, output.AcPercent * 100);
+                    //    }
+                    //}
+
+                    //// Dashboard updates
+                    //if (currentSimTime >= lastDashboardUpdate + _dashboardInterval)
+                    //{
+                    //    lastDashboardUpdate = currentSimTime;
+
+                    //    double roomTemp = _simulationService.GetRoomTemp();
+                    //    double? extTemp = _externalTemp.GetInterpolatedTemperature(currentSimTime);
+                    //    if (!extTemp.HasValue) continue;
+
+                    //    var action = _hvacController.GetHvacAction(roomTemp, _desiredTemp, extTemp.Value);
+                    //    var output = _hvacActuator.Translate(action);
+
+                    //    OnStateUpdated?.Invoke(new SimulationState(currentSimTime, roomTemp, extTemp.Value, action, output));
+                    //}
+
+                    // Dashboard updates (emit at fixed cadence, aligned to physics)
+                    while (currentSimTime >= lastDashboardUpdate + _dashboardInterval)
                     {
-                        lastDashboardUpdate = currentSimTime;
+                        lastDashboardUpdate += _dashboardInterval;
+
+                        // Never emit ahead of physics ticks
+                        DateTime simTimeForDashboard = lastDashboardUpdate <= lastPhysicsUpdate
+                            ? lastDashboardUpdate
+                            : lastPhysicsUpdate;
 
                         double roomTemp = _simulationService.GetRoomTemp();
-                        double? extTemp = _externalTemp.GetInterpolatedTemperature(currentSimTime);
-                        if (!extTemp.HasValue) continue;
+                        double? extTemp = _externalTemp.GetInterpolatedTemperature(simTimeForDashboard);
+                        if (!extTemp.HasValue) break; // wait until ext temp is known at this sim time
 
                         var action = _hvacController.GetHvacAction(roomTemp, _desiredTemp, extTemp.Value);
                         var output = _hvacActuator.Translate(action);
 
-                        OnStateUpdated?.Invoke(new SimulationState(currentSimTime, roomTemp, extTemp.Value, action, output));
+                        OnStateUpdated?.Invoke(new SimulationState(simTimeForDashboard, roomTemp, extTemp.Value, action, output));
                     }
 
                     Thread.Sleep(10);
