@@ -48,6 +48,7 @@ namespace DormClimateGUI
             cmdClear = new Button();
             tabRoom1 = new TabControl();
             tabPage1 = new TabPage();
+            label13 = new Label();
             formsPlot1 = new ScottPlot.WinForms.FormsPlot();
             textBox3 = new TextBox();
             lblRoom1AC = new Label();
@@ -350,6 +351,7 @@ namespace DormClimateGUI
             // tabPage1
             // 
             tabPage1.BackColor = SystemColors.ButtonFace;
+            tabPage1.Controls.Add(label13);
             tabPage1.Controls.Add(formsPlot1);
             tabPage1.Controls.Add(textBox3);
             tabPage1.Controls.Add(lblRoom1AC);
@@ -376,10 +378,19 @@ namespace DormClimateGUI
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Room 1";
             // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(96, 343);
+            label13.Name = "label13";
+            label13.Size = new Size(463, 15);
+            label13.TabIndex = 13;
+            label13.Text = "Room Temperature - Red  || Desired Temperature - Green || Outside Temperature - Blue";
+            // 
             // formsPlot1
             // 
             formsPlot1.DisplayScale = 1F;
-            formsPlot1.Location = new Point(9, 184);
+            formsPlot1.Location = new Point(13, 171);
             formsPlot1.Name = "formsPlot1";
             formsPlot1.Size = new Size(625, 176);
             formsPlot1.TabIndex = 12;
@@ -565,7 +576,7 @@ namespace DormClimateGUI
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(641, 383);
+            tabPage2.Size = new Size(641, 369);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Room 2";
             tabPage2.UseVisualStyleBackColor = true;
@@ -694,7 +705,7 @@ namespace DormClimateGUI
             sensorTab.Location = new Point(4, 24);
             sensorTab.Name = "sensorTab";
             sensorTab.Padding = new Padding(3);
-            sensorTab.Size = new Size(405, 383);
+            sensorTab.Size = new Size(405, 369);
             sensorTab.TabIndex = 1;
             sensorTab.Text = "Sensor";
             // 
@@ -729,7 +740,7 @@ namespace DormClimateGUI
             hmiTab.Location = new Point(4, 24);
             hmiTab.Name = "hmiTab";
             hmiTab.Padding = new Padding(3);
-            hmiTab.Size = new Size(405, 383);
+            hmiTab.Size = new Size(405, 369);
             hmiTab.TabIndex = 2;
             hmiTab.Text = "HMI";
             // 
@@ -873,7 +884,7 @@ namespace DormClimateGUI
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox groupBoxOverride;
+        //private System.Windows.Forms.GroupBox groupBoxOverride;
         private Label lblHMIDesiredTemperature;
         private Label lblHMIRoomTemperature;
         private Label lblHMIDeviceID;
@@ -912,7 +923,7 @@ namespace DormClimateGUI
         private Button btnRoomOnePlusFive;
         private Button btnRoomOnePlusTen;
         private Label label7;
-        private GroupBox groupBox1;
+        //private GroupBox groupBox1;
         private Button cmdStop;
         private Button cmdStart;
         private Label lblTime;
@@ -936,7 +947,7 @@ namespace DormClimateGUI
         private TabPage hmiTab;
         private RichTextBox richTextBox1;
         private TextBox textBox1;
-        private Button button1;
+        //private Button button1;
         private Button btnClearHMIlog;
         private Label label12;
         private TextBox textBox2;
@@ -947,5 +958,6 @@ namespace DormClimateGUI
         private TextBox textBox4;
         private RichTextBox richTextBox2;
         private ScottPlot.WinForms.FormsPlot formsPlot1;
+        private Label label13;
     }
 }

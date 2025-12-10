@@ -10,6 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DormClimate.db" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DormClimate.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ScottPlot.WinForms" Version="5.1.57" />
   </ItemGroup>
 
